@@ -62,7 +62,13 @@ const updaters = {
     },
     // 此函数用于根据条件显示或隐藏节点
     if(node, value) {
-        // 根据 value 的值决定显示或隐藏节点
-        value ? node.style.display = 'block' : node.style.display = 'none';
+        if (value) {
+            node.parentNode.replaceChild(node.parentNode.__if__, node);
+        } else {
+            node.remove();
+        }
+    },
+    show(node, value) {
+        value? node.style.display = 'block' : node.style.display = 'none';
     }
 }

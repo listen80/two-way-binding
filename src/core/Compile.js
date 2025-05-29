@@ -1,5 +1,5 @@
 import { node2Fragment } from '../nodes/NodeConverter.js';
-import { compile } from '../nodes/NodeCompiler.js';
+import { compilerNode } from '../nodes/NodeCompiler.js';
 
 
 /**
@@ -7,11 +7,10 @@ import { compile } from '../nodes/NodeCompiler.js';
  * @param {string|HTMLElement} el - 要编译的 DOM 元素或选择器
  * @param {object} vm - 视图模型实例
  */
-export default function Compile(el, vm) {
-    vm = vm;
+export default function compile(el, vm) {
     if (el) {
         let $fragment = node2Fragment(el);
-        compile($fragment, vm);
+        compilerNode($fragment, vm);
         el.appendChild($fragment);
     }
 }

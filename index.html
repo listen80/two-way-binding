@@ -7,8 +7,8 @@
 
 <body>
     <div id="app" !title="changeMessage">
-        <div background="red">
-            <button $if="message" @click="changeMessage" !title="mytitle">{{ message}}</button>
+        <div background="red" $for="3">
+            <button $show="message" @click="changeMessage" !title="mytitle">{{ message}}</button>
         </div>
         <div>
             <input type="text" $model="message">
