@@ -43,10 +43,8 @@ export function compileElement(node, vm) {
             const updateFn = directives[dir];
             if (updateFn) {
                 updateFn(node, vm, exp);
-            } else {
-                console.warn(`Unknown directive: ${dir}`);
             }
-
+            update(node, vm, exp, dir);
         } else if (isEventDirective(attrName)) {
             const dir = attrName.substring(1);
             eventHandler(node, vm, exp, dir);

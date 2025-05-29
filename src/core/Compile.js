@@ -9,7 +9,6 @@ import { compile } from '../nodes/NodeCompiler.js';
  */
 export default function Compile(el, vm) {
     vm = vm;
-    el = document.querySelector(el);
     if (el) {
         let $fragment = node2Fragment(el);
         compile($fragment, vm);

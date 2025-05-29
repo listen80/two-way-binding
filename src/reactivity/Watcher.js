@@ -17,6 +17,7 @@ class Watcher {
     }
 
     update() {
+        console.log('update', this);
         const oldValue = this.value;
         this.value = this.vm.$data[this.expOrFn];
         this.cb.call(this.vm, this.value, oldValue);

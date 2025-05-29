@@ -29,7 +29,7 @@ export const directives = {
      */
     model(node, vm, exp) {
         // 调用 update 函数更新节点，传入节点、视图模型、表达式和指令类型
-        update(node, vm, exp, 'model');
+        // update(node, vm, exp, 'model');
 
         // 如果节点类型属于特殊类型，监听 change 事件
         if (specialTypes.includes(node.type)) {
@@ -58,6 +58,6 @@ export const directives = {
      */
     if(node, vm, exp) {
         // 调用 update 函数更新节点，传入节点、视图模型、表达式和指令类型
-        update(node, vm, exp, 'if');
+        // update(node, vm, exp, 'if');
     }
 }
