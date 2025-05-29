@@ -1,6 +1,5 @@
 import { node2Fragment } from './NodeConverter.js';
 import { compile } from './NodeCompiler.js';
-import { update } from './Updater.js';
 
 /**
  * Compile 类，用于将模板中的指令和表达式编译成可执行的 DOM 操作
@@ -20,6 +19,4 @@ export default class Compile {
             this.$el.appendChild(this.$fragment);
         }
     }
-
-    
 }

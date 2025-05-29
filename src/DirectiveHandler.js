@@ -38,7 +38,6 @@ export function compileElement(node, vm) {
     Array.from(attrs).forEach(attr => {
         const attrName = attr.name;
         const exp = attr.value;
-        debugger;
         if (isDirective(attrName)) {
             const dir = attrName.substring(1);
             const updateFn = directives[dir];
