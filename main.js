@@ -5,7 +5,7 @@ const app = new Vue({
     data: {
         message: 'Hello, Vue!',
         title: 'This is a title',
-        mytitle: 'This is a mytitlemytitlemytitlemytitlemytitle',
+        myTitle: 'This is a aaa aaa bb xxxxxxxxxx',
         sss: 'This is a sss',
         checkbox: false,
         select: 'option1',
