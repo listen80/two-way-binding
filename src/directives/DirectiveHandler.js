@@ -7,14 +7,11 @@
  */
 // 定义特殊输入类型的数组，这些类型在处理 model 指令时会有特定逻辑
 const specialTypes = [
-    'checkbox', 'radio', 'select', 'file', 'image', 'button',
-    'submit', 'reset', 'color', 'date', 'datetime-local', 'email',
-    'month', 'number', 'range', 'search', 'tel', 'time', 'url',
-    'week', 'textarea', 'password', 'hidden',
+    'checkbox', 'radio', 'select', 'file'
 ];
 
-const xxType = [
-    'text', 'password', 'email', 'tel', 'url', 'number', 'range', 'date', 'datetime-local', 'month', 'week', 'time', 'color', 'search', 'file', 'image', 'button', 'submit', 'reset', 'checkbox', 'radio', 'textarea',
+const inputTypes = [
+    'text', 'password', 'email', 'tel', 'url', 'number', 'range', 'date', 'datetime-local', 'month', 'week', 'time', 'color', 'search', 'image', 'textarea',
     'select-multiple', 'select-one', 'select'
 ]
 
@@ -35,19 +32,20 @@ export const directiveHandlerFuncs = {
         // update(node, vm, exp, 'model');
 
         // 如果节点类型属于特殊类型，监听 change 事件
-        if (specialTypes.includes(node.type)) {
-            node.addEventListener('change', (e) => {
-                // 当事件触发时，将表单元素的 value 属性值赋值给视图模型中的对应属性
-                vm.$data[exp] = e.target.attributes.value.value;
-            });
-        }
-        // 如果节点类型为 text，监听 input 事件
-        else if (xxType.includes(node.type)) {
+        if (inputTypes.includes(node.type)) {
             node.addEventListener('input', (e) => {
                 // 当输入事件触发时，将表单元素的当前值赋值给视图模型中的对应属性
                 vm.$data[exp] = e.target.value;
             });
+        } else if (specialTypes.includes(node.type)) {
+            node.addEventListener('change', (e) => {
+                // 当事件触发时，将表单元素的 value 属性值赋值给视图模型中的对应属性
+                debugger
+                vm.$data[exp] = e.target.attributes.value.value;
+            });
         }
+        // 如果节点类型为 text，监听 input 事件
+
         // 处理不支持的输入类型，输出警告信息
         else {
             console.warn(`Unsupported input type: ${node.type}`);

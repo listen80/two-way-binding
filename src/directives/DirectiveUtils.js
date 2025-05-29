@@ -4,8 +4,8 @@
  * @param {string} attr - 属性名
  * @returns {boolean} - 是否为数据指令
  */
-export function isDataDirective(attr) {
-    return attr.indexOf('!') === 0;
+export function isAttributDirective(attr) {
+    return attr.indexOf(':') === 0;
 }
 
 /**
@@ -19,10 +19,10 @@ export function isDirective(attr) {
 
 /**
  * 判断属性是否为事件指令
- * @param {string} dir - 属性名
+ * @param {string} attr - 属性名
  * @returns {boolean} - 是否为事件指令
  */
-export function isEventDirective(dir) {
-    return dir.indexOf('@') === 0;
+export function isEventDirective(attr) {
+    return attr.indexOf('@') === 0;
 }
 

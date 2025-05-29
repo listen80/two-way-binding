@@ -13,18 +13,17 @@ import Watcher from '../reactivity/Watcher.js';
 // 当数据发生变化时，观察者会触发回调函数来更新节点
 export function update(node, vm, exp, dir, attr) {
     // 根据 exp 的类型确定更新函数
-    const updaterFn = typeof exp === 'function' ? exp : updaters[`${dir}`];
+    const updaterFn = updaters[`${dir}`];
     if (updaterFn) {
         // 调用更新函数更新节点内容
         updaterFn(node, vm.$data[exp], attr);
-    }
-    // 创建一个新的观察者，当数据变化时触发回调更新节点
-    new Watcher(vm, exp, (value) => {
-        if (updaterFn) {
+        new Watcher(vm, exp, (value, oldValue) => {
+            console.log('更新了', oldValue);
             // 数据变化时调用更新函数更新节点
             updaterFn(node, value, attr);
-        }
-    });
+        });
+    }
+    // 创建一个新的观察者，当数据变化时触发回调更新节点
 }
 
 // 定义各种更新函数的对象
@@ -38,7 +37,7 @@ const updaters = {
     // 此函数用于更新元素的指定属性值
     attribute(node, value, attr) {
         // 调用元素的 setAttribute 方法设置属性值
-        node.setAttribute(attr, value);
+        node.setAttribute(attr, value || '');
     },
     /**
      * 更新文本节点内容
@@ -69,6 +68,6 @@ const updaters = {
         }
     },
     show(node, value) {
-        value? node.style.display = 'block' : node.style.display = 'none';
+        value ? node.style.display = 'block' : node.style.display = 'none';
     }
 }

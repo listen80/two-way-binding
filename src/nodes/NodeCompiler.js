@@ -1,4 +1,4 @@
-import { isDirective, isEventDirective, isDataDirective } from '../directives/DirectiveUtils.js';
+import { isDirective, isEventDirective, isAttributDirective } from '../directives/DirectiveUtils.js';
 import { eventHandler } from '../events/EventBinder.js';
 import { directiveHandler } from '../directives/DirectiveHandler.js';
 
@@ -42,7 +42,7 @@ export function compileElement(node, vm) {
         } else if (isDirective(attrName)) {
             directiveHandler(node, vm, exp, dir)
             update(node, vm, exp, dir);
-        } else if (isDataDirective(attrName)) {
+        } else if (isAttributDirective(attrName)) {
             update(node, vm, exp, 'attribute', dir);
         }
     });
