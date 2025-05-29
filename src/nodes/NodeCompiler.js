@@ -1,4 +1,4 @@
-import { compileElement } from './DirectiveHandler.js';
+import { compileElement } from '../directives/DirectiveHandler.js';
 import { compileText } from './TextCompiler.js';
 
 /**

@@ -7,8 +7,8 @@
 
 <body>
     <div id="app" !title="changeMessage">
-        <div>
-            <button @click="changeMessage" !title="mytitle">{{ message}}</button>
+        <div background="red">
+            <button $if="message" @click="changeMessage" !title="mytitle">{{ message}}</button>
         </div>
         <div>
             <input type="text" $model="message">
@@ -31,11 +31,9 @@
         <div>
             {{ radio }}
             <form action="" @change="onChange">
-                <input-group>
-                    <input type="radio" name="radio" value="1">
-                    <input type="radio" name="radio" value="2">
-                    <input type="radio" name="radio" value="3">
-                </input-group>
+                <input type="radio" name="radio" value="1" $model="radio">
+                <input type="radio" name="radio" value="2" $model="radio">
+                <input type="radio" name="radio" value="3" $model="radio">
             </form>
 
         </div>

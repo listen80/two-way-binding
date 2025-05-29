@@ -1,5 +1,4 @@
-// 响应式处理函数
-import Dep from './Dep.js';
+import Dep from '../reactivity/Dep.js';
 
 function defineReactive(obj, key, val) {
     const dep = new Dep();

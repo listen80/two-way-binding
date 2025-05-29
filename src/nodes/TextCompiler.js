@@ -1,4 +1,4 @@
-import { update } from './Updater.js';
+import { update } from '../utils/Updater.js';
 
 /**
  * 编译文本节点，处理文本中的插值表达式

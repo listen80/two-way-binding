@@ -1,5 +1,5 @@
-import { update } from './Updater.js';
-import { eventHandler } from './EventBinder.js';
+import { update } from '../utils/Updater.js';
+import { eventHandler } from '../events/EventBinder.js';
 import { directives } from './Directives.js';
 /**
  * 判断属性是否为数据指令
