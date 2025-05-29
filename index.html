@@ -1,0 +1,47 @@
+<!DOCTYPE html>
+<html lang="zh">
+
+<head>
+
+</head>
+
+<body>
+    <div id="app">
+        <div>
+            <button @click="changeMessage" !title="mytitle">{{ message}}</button>
+        </div>
+        <div>
+            <input type="text" $model="message">
+        </div>
+        <div>
+            <input type="textarea" $model="message">
+        </div>
+        <div>
+            {{ checkbox }}
+            <input type="checkbox" $model="checkbox">
+        </div>
+        <div>
+            {{ select }}
+            <select name="" id="" $model="select">
+                <option value="22">22</option>
+                <option value="223">223</option>
+                <option value="224">224</option>
+            </select>
+        </div>
+        <div>
+            {{ radio }}
+            <form action="" @change="onChange">
+                <input-group>
+                    <input type="radio" name="radio" value="1">
+                    <input type="radio" name="radio" value="2">
+                    <input type="radio" name="radio" value="3">
+                </input-group>
+            </form>
+
+        </div>
+    </div>
+    </div>
+    <script src="main.js" type="module"></script>
+</body>
+
+</html>
