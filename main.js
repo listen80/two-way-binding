@@ -1,4 +1,5 @@
 import Vue from './src/Vue.js';
+import htmlParser from './src/nodes/htmlParse.js';
 
 const app = new Vue({
     el: '#app',
@@ -24,4 +25,3 @@ const app = new Vue({
         }
     }
 });
-
