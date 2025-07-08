@@ -46,8 +46,12 @@
             background-color: var(--secondary-color);
             border-radius: var(--border-radius);
             transition: transform 0.2s;
-            display: flex; /* 使用 flex 布局 */
-            align-items: center; /* 垂直居中对齐 */
+            display: flex;
+            /* 使用 flex 布局 */
+            align-items: center;
+            /* 垂直居中对齐 */
+            gap: 10px;
+            word-break: break-all;
         }
 
         li:hover {
@@ -55,12 +59,13 @@
         }
 
         /* 为 li 下的子元素设置宽度 */
-        li > * {
-            flex: 0 0 20%; /* 前两个元素宽度 20% */
+        li>* {
+            flex: 0 0 20%;
+            /* 前两个元素宽度 20% */
         }
 
-        li > :last-child {
-            flex: 0 0 60%; /* 最后一个元素宽度 60% */
+        li> :last-child {
+            /* flex: 0 0 60%; 最后一个元素宽度 60% */
         }
 
         button {
@@ -94,7 +99,8 @@
             /* padding: 10px; */
             border: 1px solid #8fd;
             border-radius: var(--border-radius);
-            width: 100%; /* 修改为 100% 以适应父容器 */
+            width: 100%;
+            /* 修改为 100% 以适应父容器 */
             margin-top: 5px;
         }
 
@@ -130,7 +136,7 @@
                 </div>
             </li>
             <li>
-                <span>a标签</span>
+                <span>属性(a标签)</span>
                 <span>{{ href }}</span>
                 <a :href="href">{{ href }}</a>
             </li>
@@ -166,21 +172,21 @@
             <li>
                 <span>checkbox</span>
                 <span>{{ checkbox }}</span>
-                <input type="checkbox" $model="checkbox">
+                <div>
+                    <input type="checkbox" $model="checkbox">
+                    <input type="checkbox" $model="checkbox">
+                    <input type="checkbox" $model="checkbox">
+                    <input type="checkbox" $model="checkbox">
+                </div>
             </li>
             <li>
-                <span>radio:</span>
+                <span>radio</span>
                 <span>{{ radio }}</span>
                 <div>
                     <input type="radio" name="radio" value="1" $model="radio">
                     <input type="radio" name="radio" value="2" $model="radio">
                     <input type="radio" name="radio" value="3" $model="radio">
                 </div>
-            </li>
-            <li>
-                <span>p标签</span>
-                <span>{{ message }}</span>
-                <p $show="message"></p>
             </li>
         </ol>
 
