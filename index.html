@@ -4,10 +4,111 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Document</title>
+    <title>双向绑定示例</title>
     <style>
+        :root {
+            --primary-color: #42b983;
+            --secondary-color: #f5f5f5;
+            --text-color: #333;
+            --border-radius: 4px;
+            --box-shadow: 0 2px 10px rgba(0, 0, 0, 0.1);
+        }
+
+        body {
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            color: var(--text-color);
+            background-color: #f9f9f9;
+            margin: 0;
+            padding: 20px;
+            display: flex;
+            justify-content: center;
+            min-height: 100vh;
+        }
+
+        #app {
+            background-color: white;
+            border-radius: var(--border-radius);
+            box-shadow: var(--box-shadow);
+            padding: 30px;
+            width: 100%;
+            max-width: 800px;
+            margin-top: 20px;
+        }
+
+        ol {
+            list-style-type: none;
+            padding: 0;
+        }
+
         li {
             padding: 20px;
+            margin-bottom: 20px;
+            background-color: var(--secondary-color);
+            border-radius: var(--border-radius);
+            transition: transform 0.2s;
+            display: flex; /* 使用 flex 布局 */
+            align-items: center; /* 垂直居中对齐 */
+        }
+
+        li:hover {
+            transform: translateY(-3px);
+        }
+
+        /* 为 li 下的子元素设置宽度 */
+        li > * {
+            flex: 0 0 20%; /* 前两个元素宽度 20% */
+        }
+
+        li > :last-child {
+            flex: 0 0 60%; /* 最后一个元素宽度 60% */
+        }
+
+        button {
+            background-color: var(--primary-color);
+            color: white;
+            border: none;
+            padding: 10px 20px;
+            border-radius: var(--border-radius);
+            cursor: pointer;
+            transition: background-color 0.3s;
+        }
+
+        button:hover {
+            background-color: #369f6d;
+        }
+
+        a {
+            color: var(--primary-color);
+            text-decoration: none;
+            transition: color 0.3s;
+        }
+
+        a:hover {
+            color: #369f6d;
+        }
+
+        input[type="text"],
+        input[type="color"],
+        textarea,
+        select {
+            /* padding: 10px; */
+            border: 1px solid #8fd;
+            border-radius: var(--border-radius);
+            width: 100%; /* 修改为 100% 以适应父容器 */
+            margin-top: 5px;
+        }
+
+        input[type="checkbox"],
+        input[type="radio"] {
+            margin-left: 10px;
+        }
+
+        p {
+            margin-top: 10px;
+            min-height: 20px;
+            padding: 10px;
+            background-color: var(--secondary-color);
+            border-radius: var(--border-radius);
         }
     </style>
 </head>
@@ -15,43 +116,71 @@
 <body>
     <div id="app" :title="changeMessage">
         <ol>
-            <li background="red">
-                <button $show="message" @click="changeMessage" :title="myTitle">{{ message }}</button>
+            <li>
+                <span>类型</span>
+                <span>值</span>
+                <span>元素</span>
             </li>
             <li>
-                a标签
-                <a :href="message">{{ message }}</a>
+                <span>文本/事件</span>
+                <span>{{ count }}</span>
+                <div>
+                    <button @click="add">add</button>
+                    <button @click="reduce">reduce</button>
+                </div>
             </li>
             <li>
-                input
+                <span>a标签</span>
+                <span>{{ href }}</span>
+                <a :href="href">{{ href }}</a>
+            </li>
+            <li>
+                <span>input</span>
+                <span>{{ message }}</span>
                 <input type="text" $model="message">
             </li>
             <li>
-                color
-                <input type="color" $model="message">
+                <span>textarea</span>
+                <span>{{ message }}</span>
+                <textarea $model="message"></textarea>
             </li>
             <li>
-                textarea
-                <input type="textarea" $model="message">
+                <span>number</span>
+                <span>{{ number }}</span>
+                <input type="number" $model="number">
             </li>
             <li>
-                <span>checkbox:</span>
-                {{ checkbox }}
-                <input type="checkbox" $model="checkbox">
+                <span>color</span>
+                <span>{{ color }}</span>
+                <input type="color" $model="color">
             </li>
             <li>
-                {{ select }}
-                <select name="" id="" $model="select">
+                <span>select</span>
+                <span>{{ select }}</span>
+                <select $model="select">
                     <option value="22">22</option>
                     <option value="223">223</option>
                     <option value="224">224</option>
                 </select>
             </li>
             <li>
-                {{ radio }}
-                <input type="radio" name="radio" value="1" $model="radio">
-                <input type="radio" name="radio" value="2" $model="radio">
-                <input type="radio" name="radio" value="3" $model="radio">
+                <span>checkbox</span>
+                <span>{{ checkbox }}</span>
+                <input type="checkbox" $model="checkbox">
+            </li>
+            <li>
+                <span>radio:</span>
+                <span>{{ radio }}</span>
+                <div>
+                    <input type="radio" name="radio" value="1" $model="radio">
+                    <input type="radio" name="radio" value="2" $model="radio">
+                    <input type="radio" name="radio" value="3" $model="radio">
+                </div>
+            </li>
+            <li>
+                <span>p标签</span>
+                <span>{{ message }}</span>
+                <p $show="message"></p>
             </li>
         </ol>
 

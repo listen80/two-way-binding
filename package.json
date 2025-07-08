@@ -4,8 +4,12 @@
   "description": "此项目 `myVue` 主要用于实现双向绑定功能，借助 Vue 的核心思想，为开发者提供便捷的数据绑定方案。",
   "main": "main.js",
   "scripts": {
+    "start": "http-server -c-1",
     "test": "echo \"Error: no test specified\" && exit 1"
   },
   "author": "",
-  "license": "ISC"
+  "license": "ISC",
+  "dependencies": {
+    "http-server": "^14.1.1"
+  }
 }
