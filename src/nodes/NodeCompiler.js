@@ -37,13 +37,13 @@ export function compileElement(node, vm) {
         const attrName = attr.name;
         const exp = attr.value;
         const dir = attrName.substring(1);
-        if (isEventDirective(attrName)) {
-            eventHandler(node, vm, exp, dir);
-        } else if (isDirective(attrName)) {
+        if (isDirective(attrName)) {
             directiveHandler(node, vm, exp, dir)
             update(node, vm, exp, dir);
         } else if (isAttributDirective(attrName)) {
             update(node, vm, exp, 'attribute', dir);
+        } else if (isEventDirective(attrName)) {
+            eventHandler(node, vm, exp, dir);
         }
     });
 }
