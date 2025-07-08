@@ -1,10 +1,10 @@
-import Vue from './src/Vue.js';
+import Binding from './src/Binding.js';
 
-const app = new Vue({
+const app = new Binding({
     el: '#app',
     data: {
         count: 0,
-        message: 'Hello, Vue!',
+        message: 'Hello, World!',
         href: './?' + Date.now(),
         number: 33,
         title: 'This is a title',
@@ -36,3 +36,5 @@ const app = new Vue({
 
     }
 });
+
+window.app = app
