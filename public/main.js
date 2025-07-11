@@ -1,4 +1,4 @@
-import Binding from './src/Binding.js';
+import Binding from '../src/Binding.js';
 
 const app = new Binding({
     el: '#app',
