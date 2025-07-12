@@ -35,13 +35,13 @@ export const directiveHandlerFuncs = {
         if (inputTypes.includes(node.type)) {
             node.addEventListener('input', (e) => {
                 // 当输入事件触发时，将表单元素的当前值赋值给视图模型中的对应属性
-                vm.$data[exp] = e.target.value;
+                vm[exp] = e.target.value;
             });
         } else if (specialTypes.includes(node.type)) {
             node.addEventListener('change', (e) => {
                 // 当事件触发时，将表单元素的 value 属性值赋值给视图模型中的对应属性
                 debugger
-                vm.$data[exp] = e.target.attributes.value.value;
+                vm[exp] = e.target.attributes.value.value;
             });
         }
         // 如果节点类型为 text，监听 input 事件

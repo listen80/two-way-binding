@@ -3,13 +3,32 @@ import compile from './core/Compile.js';
 import observe from './core/Observe.js';
 
 export default class Binding {
-    constructor(options) {
-        this.$options = options;
-        this.$data = options.data;
-        this.$el = document.querySelector(options.el);
-        // 对数据进行响应式处理
-        observe(this.$data);
-        // 编译模板
-        compile(this.$el, this);
+    constructor(options, el) {
+        const { script, template } = options
+        // 1. 获取的ES6代码是模
+        const es6ModuleCode = script.textContent;
+
+        // 2. 将代码转为blob URL（模拟模块文件）
+        const blob = new Blob([es6ModuleCode], { type: 'text/javascript' });
+        const url = URL.createObjectURL(blob);
+        console.log(url)
+        // 动态import 默认是异步的，无法直接同步执行。若要实现类似同步的效果，可以使用 async/await 语法，但需在 async 函数环境中使用。
+
+        // 3. 用动态import()加载该模块
+        import(url).then(module => {
+            // console.log(module.default); // 输出 'ES6 Module'
+            const $data = module.default.data || {};
+            this.$methods = module.default.methods || {};
+            Object.assign(this, $data);
+            observe(this);
+            this.$data = $data
+            compile(template, this);
+            el.appendChild(template)
+        }).catch(err => {
+            console.error('加载模块失败', err);
+        });
+        // this.$el = document.querySelector(options.el);
+        // // 对数据进行响应式处理
+        // // 编译模板
     }
 };

@@ -16,7 +16,7 @@ export function update(node, vm, exp, dir, attr) {
     const updaterFn = updaters[`${dir}`];
     if (updaterFn) {
         // 调用更新函数更新节点内容
-        updaterFn(node, vm.$data[exp], attr);
+        updaterFn(node, vm[exp], attr);
         new Watcher(vm, exp, (value, oldValue) => {
             console.log('更新了', oldValue);
             // 数据变化时调用更新函数更新节点

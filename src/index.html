@@ -19,7 +19,7 @@
             color: var(--text-color);
             background-color: #f9f9f9;
             margin: 0;
-            padding: 20px;
+            /* padding: 20px; */
             display: flex;
             justify-content: center;
             min-height: 100vh;
@@ -32,7 +32,7 @@
             padding: 30px;
             width: 100%;
             max-width: 800px;
-            margin-top: 20px;
+            margin: 20px;
         }
 
         ol {
@@ -120,118 +120,30 @@
 </head>
 
 <body>
-    <div id="app">
-        <ol>
-            <li>
-                <span>类型</span>
-                <span>值</span>
-                <span>元素</span>
-            </li>
-            <li>
-                <span>文本/事件</span>
-                <span>{{ count }}</span>
-                <div>
-                    <button @click="add">add</button>
-                    <button @click="reduce">reduce</button>
-                </div>
-            </li>
-            <li>
-                <span>属性(a标签)</span>
-                <span>{{ href }}</span>
-                <a :href="href">{{ href }}</a>
-            </li>
-            <li>
-                <span>input</span>
-                <span>{{ message }}</span>
-                <input type="text" $model="message">
-            </li>
-            <li>
-                <span>textarea</span>
-                <span>{{ message }}</span>
-                <textarea $model="message"></textarea>
-            </li>
-            <li>
-                <span>number</span>
-                <span>{{ number }}</span>
-                <input type="number" $model="number">
-            </li>
-            <li>
-                <span>color</span>
-                <span>{{ color }}</span>
-                <input type="color" $model="color">
-            </li>
-            <li>
-                <span>select</span>
-                <span>{{ select }}</span>
-                <select $model="select">
-                    <option value="22">22</option>
-                    <option value="223">223</option>
-                    <option value="224">224</option>
-                </select>
-            </li>
-            <li>
-                <span>checkbox</span>
-                <span>{{ checkbox }}</span>
-                <div>
-                    <input type="checkbox" $model="checkbox">
-                    <input type="checkbox" $model="checkbox">
-                    <input type="checkbox" $model="checkbox">
-                    <input type="checkbox" $model="checkbox">
-                </div>
-            </li>
-            <li>
-                <span>radio</span>
-                <span>{{ radio }}</span>
-                <div>
-                    <input type="radio" name="radio" value="1" $model="radio">
-                    <input type="radio" name="radio" value="2" $model="radio">
-                    <input type="radio" name="radio" value="3" $model="radio">
-                </div>
-            </li>
-        </ol>
-
-    </div>
+    <div id="app"></div>
     <script type="module">
         import Binding from './Binding.js';
+        import { syncXmlHttpRequest } from './utils/get.js';
+        import DOMParser from './nodes/htmlParse.js';
+        
+        function loadComponent(url) {
+            const result = syncXmlHttpRequest(url)
+            const { template, script } = DOMParser(result);
+            // const component = template.cloneNode(true);
+            return DOMParser(result);
+        }
+        // loadComponent('./App.html')
 
-        const app = new Binding({
-            el: '#app',
-            data: {
-                count: 0,
-                message: 'Hello, World!',
-                href: './?' + Date.now(),
-                number: 33,
-                title: 'This is a title',
-                myTitle: 'This is a aaa aaa bb ',
-                sss: 'This is a sss',
-                checkbox: false,
-                select: '223',
-                radio: 'option1',
-                text: 'just a simple text',
-                color: '#f3c'
-            },
-            methods: {
-                add() {
-                    this.$data.count++;
-                },
-                reduce() {
-                    this.$data.count--;
-                },
-                changeMessage() {
-                    if (this.$data.message === 'Message changed!') {
-                        this.$data.message = 'Hello, Vue!';
-                        return;
-                    }
-                    this.$data.message = 'Message changed!';
-                },
-                onChange(e) {
-                    console.log('onChange', e);
-                },
+        function createApp(component, el) {
+            const app = new Binding(component, el);
+            // console.log(app, ...app.$options.template)
+            // el.appendChild(app.$options.template)
+            // return app;
+        }
+        createApp(loadComponent('./App.html'), document.querySelector('#app'))
+        // const app = new Binding();
 
-            }
-        });
-
-        window.app = app
+        // window.app = app
 
     </script>
 </body>

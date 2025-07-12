@@ -6,7 +6,7 @@
  * @param {string} dir - 事件类型
  */
 export function eventHandler(node, vm, exp, dir) {
-    const fn = vm.$options.methods && vm.$options.methods[exp];
+    const fn = vm.$methods && vm.$methods[exp];
     if (fn && dir) {
         node.addEventListener(dir, fn.bind(vm));
     }
