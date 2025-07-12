@@ -108,7 +108,7 @@ export default {
 
     },
     components: {
-        'x-button': './public/x-button.vue'
+        'x-button': './x-button.vue'
     }
 }
 </script>
