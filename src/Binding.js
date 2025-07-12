@@ -4,7 +4,7 @@ import observe from './core/Observe.js';
 import { loadComponent } from './utils/get.js';
 
 export default class Binding {
-    constructor({ component, el }) {
+    constructor({ component, el, props = {} }) {
 
         if (!component) {
             throw new Error('component is required');
@@ -29,7 +29,7 @@ export default class Binding {
             const data = module.default.data || {};
             const methods = module.default.methods || {};
             const components = module.default.components || {};
-            Object.assign(this, data);
+            Object.assign(this, props, data);
             observe(this);
             // this.data = data
             compile(template, this, methods, components);
