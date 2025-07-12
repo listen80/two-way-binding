@@ -1,8 +1,7 @@
 import { isDirective, isEventDirective, isAttributDirective } from '../directives/DirectiveUtils.js';
 import { eventHandler } from '../events/EventBinder.js';
 import { directiveHandler } from '../directives/DirectiveHandler.js';
-import Binding from '../Binding.js';
-import { loadComponent } from '../utils/get.js';
+import Binding from '../core/Binding.js';
 import { update } from '../utils/Updater.js';
 /**
  * 将 DOM 元素转换为文档片段

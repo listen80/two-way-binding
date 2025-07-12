@@ -1,7 +1,7 @@
 
-import compile from './core/Compile.js';
-import observe from './core/Observe.js';
-import { loadComponent } from './utils/get.js';
+import compile from './Compile.js';
+import observe from './Observe.js';
+import { loadComponent } from '../utils/get.js';
 
 export default class Binding {
     constructor({ component, el, props = {} }) {
