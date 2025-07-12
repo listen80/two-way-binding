@@ -7,11 +7,11 @@ import parserHTML from '../nodes/htmlParse.js';
  * @param {string|HTMLElement} el - 要编译的 DOM 元素或选择器
  * @param {object} vm - 视图模型实例
  */
-export default function compile(template, vm, methods) {
+export default function compile(template, vm, methods, components) {
 
     // let $fragment = node2Fragment(el);
     // debugger
-    compilerNode(template, vm, methods);
+    compilerNode(template, vm, methods, components);
 
     // el.appendChild(json);
 }

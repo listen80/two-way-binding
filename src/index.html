@@ -31,8 +31,10 @@
     <div id="app"></div>
     <script type="module">
         import Binding from './Binding.js';
-        import { loadComponent } from './utils/get.js';
-        new Binding(loadComponent('./App.vue'), document.querySelector('#app'))
+        new Binding({
+            component: './App.vue',
+            el: document.querySelector('#app')
+        })
     </script>
 </body>
 

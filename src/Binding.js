@@ -1,11 +1,19 @@
 
 import compile from './core/Compile.js';
 import observe from './core/Observe.js';
+import { loadComponent } from './utils/get.js';
 
 export default class Binding {
-    constructor(component, el) {
+    constructor({ component, el }) {
+
+        if (!component) {
+            throw new Error('component is required');
+        }
+        if (typeof component === 'string') {
+            component = loadComponent(component)
+        }
+
         const { script, template, style } = component
-        document.body.append(style)
         // 1. 获取的ES6代码是模
         const es6ModuleCode = script.textContent;
 
@@ -16,13 +24,15 @@ export default class Binding {
 
         // 3. 用动态import()加载该模块
         import(url).then(module => {
+            document.body.append(style)
             // console.log(module.default); // 输出 'ES6 Module'
-            const $data = module.default.data || {};
-            const $methods = module.default.methods || {};
-            Object.assign(this, $data);
+            const data = module.default.data || {};
+            const methods = module.default.methods || {};
+            const components = module.default.components || {};
+            Object.assign(this, data);
             observe(this);
-            // this.$data = $data
-            compile(template, this, $methods);
+            // this.data = data
+            compile(template, this, methods, components);
             // 终于明白这里为什么是replace
             el.replaceWith(template)
         }).catch(err => {

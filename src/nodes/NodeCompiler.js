@@ -13,29 +13,32 @@ import { update } from '../utils/Updater.js';
  * @param {Node} el - 要编译的节点
  * @param {object} vm - 视图模型实例
  */
-export function compilerNode(el, vm, methods) {
+export function compilerNode(el, vm, methods, components) {
     const childNodes = el.childNodes;
 
     Array.from(childNodes).forEach(node => {
         if (node.nodeType === 1) {
             if (node.tagName.includes('-')) {
-                console.log(node.tagName)
+                // console.log(node.tagName)
                 const comment = document.createComment('');
                 node.replaceWith(comment)
                 try {
-                    const component = loadComponent(node.tagName.toLowerCase() + '.vue');
-                    new Binding(component, comment)
+                    const component = node.tagName.toLowerCase();
+                    new Binding({ component: components[component], el: comment })
+
                 } catch (error) {
                     console.log(error)
                 }
             } else {
-                compileElement(node, vm, methods);
+                compileElement(node, vm, methods, components);
+
             }
         } else if (node.nodeType === 3) {
             compileText(node, vm);
         }
         if (node.childNodes && node.childNodes.length) {
-            compilerNode(node, vm, methods);
+            compilerNode(node, vm, methods, components);
+
         }
     });
 }
