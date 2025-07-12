@@ -5,8 +5,8 @@
  * @param {string} exp - 方法名
  * @param {string} dir - 事件类型
  */
-export function eventHandler(node, vm, exp, dir) {
-    const fn = vm.$methods && vm.$methods[exp];
+export function eventHandler(node, vm, exp, dir, methods) {
+    const fn = methods[exp];
     if (fn && dir) {
         node.addEventListener(dir, fn.bind(vm));
     }

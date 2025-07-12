@@ -1,3 +1,10 @@
+import DOMParser from '../nodes/htmlParse.js';
+
+export function loadComponent(url) {
+    const result = syncXmlHttpRequest(url)
+    return DOMParser(result);
+}
+
 export function syncXmlHttpRequest(url) {
     const xhr = new XMLHttpRequest();
     xhr.open('GET', url, false); // 第三个参数设为 false 表示同步请求

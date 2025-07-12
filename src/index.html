@@ -24,98 +24,6 @@
             justify-content: center;
             min-height: 100vh;
         }
-
-        #app {
-            background-color: white;
-            border-radius: var(--border-radius);
-            box-shadow: var(--box-shadow);
-            padding: 30px;
-            width: 100%;
-            max-width: 800px;
-            margin: 20px;
-        }
-
-        ol {
-            list-style-type: none;
-            padding: 0;
-        }
-
-        li {
-            padding: 20px;
-            margin-bottom: 20px;
-            background-color: var(--secondary-color);
-            border-radius: var(--border-radius);
-            transition: transform 0.2s;
-            display: flex;
-            /* 使用 flex 布局 */
-            align-items: center;
-            /* 垂直居中对齐 */
-            gap: 10px;
-            word-break: break-all;
-        }
-
-        li:hover {
-            transform: translateY(-3px);
-        }
-
-        /* 为 li 下的子元素设置宽度 */
-        li>* {
-            flex: 0 0 20%;
-            /* 前两个元素宽度 20% */
-        }
-
-        li> :last-child {
-            /* flex: 0 0 60%; 最后一个元素宽度 60% */
-        }
-
-        button {
-            background-color: var(--primary-color);
-            color: white;
-            border: none;
-            padding: 10px 20px;
-            border-radius: var(--border-radius);
-            cursor: pointer;
-            transition: background-color 0.3s;
-        }
-
-        button:hover {
-            background-color: #369f6d;
-        }
-
-        a {
-            color: var(--primary-color);
-            text-decoration: none;
-            transition: color 0.3s;
-        }
-
-        a:hover {
-            color: #369f6d;
-        }
-
-        input[type="text"],
-        input[type="color"],
-        textarea,
-        select {
-            /* padding: 10px; */
-            border: 1px solid #8fd;
-            border-radius: var(--border-radius);
-            width: 100%;
-            /* 修改为 100% 以适应父容器 */
-            margin-top: 5px;
-        }
-
-        input[type="checkbox"],
-        input[type="radio"] {
-            margin-left: 10px;
-        }
-
-        p {
-            margin-top: 10px;
-            min-height: 20px;
-            padding: 10px;
-            background-color: var(--secondary-color);
-            border-radius: var(--border-radius);
-        }
     </style>
 </head>
 
@@ -123,28 +31,8 @@
     <div id="app"></div>
     <script type="module">
         import Binding from './Binding.js';
-        import { syncXmlHttpRequest } from './utils/get.js';
-        import DOMParser from './nodes/htmlParse.js';
-        
-        function loadComponent(url) {
-            const result = syncXmlHttpRequest(url)
-            const { template, script } = DOMParser(result);
-            // const component = template.cloneNode(true);
-            return DOMParser(result);
-        }
-        // loadComponent('./App.html')
-
-        function createApp(component, el) {
-            const app = new Binding(component, el);
-            // console.log(app, ...app.$options.template)
-            // el.appendChild(app.$options.template)
-            // return app;
-        }
-        createApp(loadComponent('./App.html'), document.querySelector('#app'))
-        // const app = new Binding();
-
-        // window.app = app
-
+        import { loadComponent } from './utils/get.js';
+        new Binding(loadComponent('./App.vue'), document.querySelector('#app'))
     </script>
 </body>
 

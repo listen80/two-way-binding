@@ -1,7 +1,8 @@
 import { isDirective, isEventDirective, isAttributDirective } from '../directives/DirectiveUtils.js';
 import { eventHandler } from '../events/EventBinder.js';
 import { directiveHandler } from '../directives/DirectiveHandler.js';
-
+import Binding from '../Binding.js';
+import { loadComponent } from '../utils/get.js';
 import { update } from '../utils/Updater.js';
 /**
  * 将 DOM 元素转换为文档片段
@@ -12,16 +13,29 @@ import { update } from '../utils/Updater.js';
  * @param {Node} el - 要编译的节点
  * @param {object} vm - 视图模型实例
  */
-export function compilerNode(el, vm) {
+export function compilerNode(el, vm, methods) {
     const childNodes = el.childNodes;
+
     Array.from(childNodes).forEach(node => {
         if (node.nodeType === 1) {
-            compileElement(node, vm);
+            if (node.tagName.includes('-')) {
+                console.log(node.tagName)
+                const comment = document.createComment('');
+                node.replaceWith(comment)
+                try {
+                    const component = loadComponent(node.tagName.toLowerCase() + '.vue');
+                    new Binding(component, comment)
+                } catch (error) {
+                    console.log(error)
+                }
+            } else {
+                compileElement(node, vm, methods);
+            }
         } else if (node.nodeType === 3) {
             compileText(node, vm);
         }
         if (node.childNodes && node.childNodes.length) {
-            compilerNode(node, vm);
+            compilerNode(node, vm, methods);
         }
     });
 }
@@ -31,7 +45,8 @@ export function compilerNode(el, vm) {
  * @param {HTMLElement} node - 要编译的元素节点
  * @param {object} vm - 视图模型实例
  */
-export function compileElement(node, vm) {
+export function compileElement(node, vm, methods) {
+
     const attrs = node.attributes;
     Array.from(attrs).forEach(attr => {
         const attrName = attr.name;
@@ -43,7 +58,7 @@ export function compileElement(node, vm) {
         } else if (isAttributDirective(attrName)) {
             update(node, vm, exp, 'attribute', dir);
         } else if (isEventDirective(attrName)) {
-            eventHandler(node, vm, exp, dir);
+            eventHandler(node, vm, exp, dir, methods);
         }
     });
 }
