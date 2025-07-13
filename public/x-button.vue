@@ -1,39 +1,19 @@
 <template>
-    <button class="btn">{{ title }}</button>
+    <div>
+        我是子元素
+    </div>
+    <button class="btn" @click="click">{{ title }}</button>
+    
 </template>
 <script>
 export default {
     data: {
-        count: 0,
-        message: 'Hello, World!',
-        href: './?' + Date.now(),
-        number: 33,
-        title: 'This is a title',
-        myTitle: 'This is a aaa aaa bb ',
-        sss: 'This is a sss',
-        checkbox: false,
-        select: '223',
-        radio: 'option1',
-        text: 'just a simple text',
-        color: '#f3c'
+        title: '我是子元素',
     },
     methods: {
-        add() {
+        click(e) {
             console.log(this)
-            this.count++;
-        },
-        reduce() {
-            this.count--;
-        },
-        changeMessage() {
-            if (this.message === 'Message changed!') {
-                this.message = 'Hello, Vue!';
-                return;
-            }
-            this.message = 'Message changed!';
-        },
-        onChange(e) {
-            console.log('onChange', e);
+            this.title = '我是子元素2';
         },
     },
 }
@@ -42,5 +22,7 @@ export default {
 <style>
 .btn {
     background-color: rgb(69, 147, 216);
+    transform: scale(0.9);
+    transition: all .3s ease;
 }
 </style>
