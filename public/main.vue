@@ -144,7 +144,7 @@ li {
 }
 
 li:hover {
-    transform: translateY(-3px);
+    transform: scale(1.03);
 }
 
 /* 为 li 下的子元素设置宽度 */

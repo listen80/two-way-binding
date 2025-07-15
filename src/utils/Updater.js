@@ -18,7 +18,7 @@ export function update(node, vm, exp, dir, attr) {
         // 调用更新函数更新节点内容
         updaterFn(node, vm[exp], attr);
         new Watcher(vm, exp, (value, oldValue) => {
-            console.log('更新了', oldValue);
+            console.log('更新了', oldValue, '=>', value);
             // 数据变化时调用更新函数更新节点
             updaterFn(node, value, attr);
         });
