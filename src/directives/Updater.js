@@ -68,6 +68,20 @@ const updaters = {
     },
     show(node, value) {
         value ? node.style.display = '' : node.style.display = 'none';
+    },
+    for(node, value, oldValue) {
+        if (node.__for__) {
+            node.__for__.forEach(item => {
+                item.remove();
+            })
+        } else {
+            node.__for__ = [];
+            node.__parent__ = node.parentElement
+            node.remove()
+        }
+        for (let i = 0; i < value; i++) {
+            node.__for__.push(node.__parent__.appendChild(node.cloneNode(true)));
+        }
     }
 }
 

@@ -30,6 +30,15 @@
                 <a $show="message">我在呢</a>
             </li>
             <li>
+                <span>for</span>
+                <span>{{ message }}</span>
+                <div>
+                    <div $for="count">
+                        <a href="https://www.baidu.com">111</a>
+                    </div>
+                </div>
+            </li>
+            <li>
                 <span>input</span>
                 <span>{{ message }}</span>
                 <input type="text" $model="message">
