@@ -37,10 +37,12 @@ export const directiveHandlerFuncs = {
                 vm[exp] = e.target.value;
             });
         } else if (specialTypes.includes(node.type)) {
-            console.log(node, vm, exp)
             node.addEventListener('change', (e) => {
                 // 当事件触发时，将表单元素的 value 属性值赋值给视图模型中的对应属性
                 if (node.type === 'checkbox') {
+                    // if (!Array.isArray(vm[exp])) {
+                    //     vm[exp] = [];
+                    // }
                     if (vm[exp].includes(e.target.getAttribute('value'))) {
                         vm[exp].splice(vm[exp].indexOf(e.target.getAttribute('value')), 1);
                     } else {

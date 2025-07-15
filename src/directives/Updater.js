@@ -9,22 +9,7 @@ import Watcher from '../reactivity/Watcher.js';
  * @param {string} dir - 指令类型
  * @param {string} [attr] - 属性名（可选）
  */
-// 此函数的作用是更新节点内容，并且为节点添加观察者
-// 当数据发生变化时，观察者会触发回调函数来更新节点
-export function update(node, vm, exp, dir, attr) {
-    // 根据 exp 的类型确定更新函数
-    const updaterFn = updaters[`${dir}`];
-    if (updaterFn) {
-        // 调用更新函数更新节点内容
-        updaterFn(node, vm[exp], attr);
-        new Watcher(vm, exp, (value, oldValue) => {
-            console.log('更新了', oldValue, '=>', value);
-            // 数据变化时调用更新函数更新节点
-            updaterFn(node, value, attr);
-        });
-    }
-    // 创建一个新的观察者，当数据变化时触发回调更新节点
-}
+
 
 // 定义各种更新函数的对象
 const updaters = {
@@ -77,4 +62,22 @@ const updaters = {
     show(node, value) {
         value ? node.style.display = '' : node.style.display = 'none';
     }
+}
+
+
+// 此函数的作用是更新节点内容，并且为节点添加观察者
+// 当数据发生变化时，观察者会触发回调函数来更新节点
+export function update(node, vm, exp, dir, attr) {
+    // 根据 exp 的类型确定更新函数
+    const updaterFn = updaters[`${dir}`];
+    if (updaterFn) {
+        // 调用更新函数更新节点内容
+        updaterFn(node, vm[exp], attr);
+        new Watcher(vm, exp, (value, oldValue) => {
+            console.log('更新了', oldValue, '=>', value);
+            // 数据变化时调用更新函数更新节点
+            updaterFn(node, value, attr);
+        });
+    }
+    // 创建一个新的观察者，当数据变化时触发回调更新节点
 }

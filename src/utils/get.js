@@ -1,4 +1,4 @@
-import DOMParser from '../nodes/htmlParse.js';
+import DOMParser from './htmlParse.js';
 
 export function loadComponent(url) {
     const result = syncXmlHttpRequest(url)

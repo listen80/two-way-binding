@@ -4,7 +4,7 @@
  * @returns {boolean} - 是否为数据指令
  */
 function isAttributDirective(attr) {
-  return attr.indexOf(':') === 0;
+  return attr[0] === 0;
 }
 
 /**
@@ -13,7 +13,7 @@ function isAttributDirective(attr) {
  * @returns {boolean} - 是否为自定义指令
  */
 function isDirective(attr) {
-  return attr.indexOf('$') === 0;
+  return attr[0] === 0;
 }
 
 /**
@@ -22,7 +22,7 @@ function isDirective(attr) {
  * @returns {boolean} - 是否为事件指令
  */
 function isEventDirective(attr) {
-  return attr.indexOf('@') === 0;
+  return attr[0] === 0;
 }
 
 /**
@@ -70,10 +70,12 @@ const directiveHandlerFuncs = {
         vm[exp] = e.target.value;
       });
     } else if (specialTypes.includes(node.type)) {
-      console.log(node, vm, exp);
       node.addEventListener('change', e => {
         // 当事件触发时，将表单元素的 value 属性值赋值给视图模型中的对应属性
         if (node.type === 'checkbox') {
+          // if (!Array.isArray(vm[exp])) {
+          //     vm[exp] = [];
+          // }
           if (vm[exp].includes(e.target.getAttribute('value'))) {
             vm[exp].splice(vm[exp].indexOf(e.target.getAttribute('value')), 1);
           } else {
@@ -155,22 +157,6 @@ class Watcher {
  * @param {string} dir - 指令类型
  * @param {string} [attr] - 属性名（可选）
  */
-// 此函数的作用是更新节点内容，并且为节点添加观察者
-// 当数据发生变化时，观察者会触发回调函数来更新节点
-function update(node, vm, exp, dir, attr) {
-  // 根据 exp 的类型确定更新函数
-  const updaterFn = updaters[`${dir}`];
-  if (updaterFn) {
-    // 调用更新函数更新节点内容
-    updaterFn(node, vm[exp], attr);
-    new Watcher(vm, exp, (value, oldValue) => {
-      console.log('更新了', oldValue, '=>', value);
-      // 数据变化时调用更新函数更新节点
-      updaterFn(node, value, attr);
-    });
-  }
-  // 创建一个新的观察者，当数据变化时触发回调更新节点
-}
 
 // 定义各种更新函数的对象
 const updaters = {
@@ -225,6 +211,23 @@ const updaters = {
   }
 };
 
+// 此函数的作用是更新节点内容，并且为节点添加观察者
+// 当数据发生变化时，观察者会触发回调函数来更新节点
+function update(node, vm, exp, dir, attr) {
+  // 根据 exp 的类型确定更新函数
+  const updaterFn = updaters[`${dir}`];
+  if (updaterFn) {
+    // 调用更新函数更新节点内容
+    updaterFn(node, vm[exp], attr);
+    new Watcher(vm, exp, (value, oldValue) => {
+      console.log('更新了', oldValue, '=>', value);
+      // 数据变化时调用更新函数更新节点
+      updaterFn(node, value, attr);
+    });
+  }
+  // 创建一个新的观察者，当数据变化时触发回调更新节点
+}
+
 /**
  * 将 DOM 元素转换为文档片段
  * @param {HTMLElement} el - 要转换的 DOM 元素
@@ -271,15 +274,15 @@ function compilerNode(el, vm, methods, components) {
 function compileElement(node, vm, methods) {
   const attrs = node.attributes;
   Array.from(attrs).forEach(attr => {
-    const attrName = attr.name;
+    const name = attr.name;
     const exp = attr.value;
-    const dir = attrName.substring(1);
-    if (isDirective(attrName)) {
+    const dir = name.substring(1);
+    if (isDirective(name)) {
       directiveHandler(node, vm, exp, dir);
       update(node, vm, exp, dir);
-    } else if (isAttributDirective(attrName)) {
+    } else if (isAttributDirective(name)) {
       update(node, vm, exp, 'attribute', dir);
-    } else if (isEventDirective(attrName)) {
+    } else if (isEventDirective(name)) {
       eventHandler(node, vm, exp, dir, methods);
     }
   });
@@ -297,19 +300,6 @@ function compileText(node, vm) {
     const exp = RegExp.$1.trim();
     update(node, vm, exp, 'text');
   }
-}
-
-/**
- * 构造函数，初始化编译器
- * @param {string|HTMLElement} el - 要编译的 DOM 元素或选择器
- * @param {object} vm - 视图模型实例
- */
-function compile(template, vm, methods, components) {
-  // let $fragment = node2Fragment(el);
-  // debugger
-  compilerNode(template, vm, methods, components);
-
-  // el.appendChild(json);
 }
 
 function defineReactive(obj, key, val) {
@@ -404,7 +394,7 @@ class Binding {
       Object.assign(this, props, data);
       observe(this);
       // this.data = data
-      compile(template, this, methods, components);
+      compilerNode(template, this, methods, components);
       // 终于明白这里为什么是replace
       el.replaceWith(template);
     }).catch(err => {
