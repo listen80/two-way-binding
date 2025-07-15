@@ -1,6 +1,4 @@
-import { node2Fragment } from '../nodes/NodeConverter.js';
 import { compilerNode } from '../nodes/NodeCompiler.js';
-import parserHTML from '../nodes/htmlParse.js';
 
 /**
  * 构造函数，初始化编译器

@@ -1,7 +1,6 @@
 import Dep from './Dep.js';
 
-// 观察者
-class Watcher {
+export default class Watcher {
     constructor(vm, expOrFn, cb) {
         this.vm = vm;
         this.expOrFn = expOrFn;
@@ -23,5 +22,4 @@ class Watcher {
         this.cb.call(this.vm, this.value, oldValue);
     }
 }
-
-export default Watcher;
+;

@@ -68,6 +68,6 @@ const updaters = {
         }
     },
     show(node, value) {
-        value ? node.style.display = 'block' : node.style.display = 'none';
+        value ? node.style.display = '' : node.style.display = 'none';
     }
 }

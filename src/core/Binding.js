@@ -20,7 +20,6 @@ export default class Binding {
         // 2. 将代码转为blob URL（模拟模块文件）
         const blob = new Blob([es6ModuleCode], { type: 'text/javascript' });
         const url = URL.createObjectURL(blob);
-        // 动态import 默认是异步的，无法直接同步执行。若要实现类似同步的效果，可以使用 async/await 语法，但需在 async 函数环境中使用。
 
         // 3. 用动态import()加载该模块
         import(url).then(module => {
@@ -38,8 +37,8 @@ export default class Binding {
         }).catch(err => {
             console.error('加载模块失败', err);
         });
-        // this.$el = document.querySelector(options.el);
-        // // 对数据进行响应式处理
-        // // 编译模板
+    }
+    onLoad() {
+
     }
 };
