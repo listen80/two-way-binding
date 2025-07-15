@@ -7,7 +7,7 @@
  */
 // 定义特殊输入类型的数组，这些类型在处理 model 指令时会有特定逻辑
 const specialTypes = [
-    'checkbox', 'radio', 'select', 'file'
+    'checkbox', 'radio', 'select-one'
 ];
 
 const inputTypes = [
@@ -30,7 +30,6 @@ export const directiveHandlerFuncs = {
     model(node, vm, exp) {
         // 调用 update 函数更新节点，传入节点、视图模型、表达式和指令类型
         // update(node, vm, exp, 'model');
-
         // 如果节点类型属于特殊类型，监听 change 事件
         if (inputTypes.includes(node.type)) {
             node.addEventListener('input', (e) => {
@@ -38,10 +37,21 @@ export const directiveHandlerFuncs = {
                 vm[exp] = e.target.value;
             });
         } else if (specialTypes.includes(node.type)) {
+            console.log(node, vm, exp)
             node.addEventListener('change', (e) => {
                 // 当事件触发时，将表单元素的 value 属性值赋值给视图模型中的对应属性
-                debugger
-                vm[exp] = e.target.attributes.value.value;
+                if (node.type === 'checkbox') {
+                    if (vm[exp].includes(e.target.getAttribute('value'))) {
+                        vm[exp].splice(vm[exp].indexOf(e.target.getAttribute('value')), 1);
+                    } else {
+                        vm[exp].push(e.target.getAttribute('value'));
+                    }
+                    vm[exp] = vm[exp].slice()
+                } else if (node.type === 'radio') {
+                    vm[exp] = e.target.value;
+                } else if (node.type === 'select') {
+                    vm[exp] = e.target.value;
+                }
             });
         }
         // 如果节点类型为 text，监听 input 事件

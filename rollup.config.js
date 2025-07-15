@@ -33,8 +33,9 @@ if (__DEV__) {
       contentBase: "public",
     })
   );
+} else {
+  plugins.push(terser());
 }
-plugins.push(terser());
 
 export default {
   plugins,

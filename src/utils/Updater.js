@@ -57,7 +57,14 @@ const updaters = {
     // 此函数用于更新表单元素的值
     model(node, value) {
         // 设置表单元素的值
-        node.value = value;
+        // debugger
+        if (node.type === 'checkbox') {
+            node.checked = value.includes(node.value);
+        } else if (node.type === 'radio') {
+            node.checked = value === node.value;
+        } else {
+            node.value = value;
+        }
     },
     // 此函数用于根据条件显示或隐藏节点
     if(node, value) {

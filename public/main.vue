@@ -52,19 +52,19 @@
                 <span>checkbox</span>
                 <span>{{ checkbox }}</span>
                 <div>
-                    <input type="checkbox" $model="checkbox">
-                    <input type="checkbox" $model="checkbox">
-                    <input type="checkbox" $model="checkbox">
-                    <input type="checkbox" $model="checkbox">
+                    <input type="checkbox" value="1" $model="checkbox">
+                    <input type="checkbox" value="2" $model="checkbox">
+                    <input type="checkbox" value="3" $model="checkbox">
+                    <input type="checkbox" value="4" $model="checkbox">
                 </div>
             </li>
             <li>
                 <span>radio</span>
                 <span>{{ radio }}</span>
                 <div>
-                    <input type="radio" name="radio" value="1" $model="radio">
-                    <input type="radio" name="radio" value="2" $model="radio">
-                    <input type="radio" name="radio" value="3" $model="radio">
+                    <input type="radio" value="1" $model="radio">
+                    <input type="radio" value="2" $model="radio">
+                    <input type="radio" value="3" $model="radio">
                 </div>
             </li>
             <x-button>点我</x-button>
@@ -77,11 +77,11 @@ export default {
         count: 0,
         message: 'Hello, World!',
         href: './?' + Date.now(),
-        number: 33,
+        number: '33',
         title: 'This is a title',
         myTitle: 'This is a aaa aaa bb ',
         sss: 'This is a sss',
-        checkbox: false,
+        checkbox: ["1", "3"],
         select: '223',
         radio: 'option1',
         text: 'just a simple text',
@@ -125,7 +125,7 @@ export default {
 }
 
 ol {
-    list-style-type: none;
+    /* list-style-type: none; */
     padding: 0;
 }
 
@@ -147,14 +147,8 @@ li:hover {
     transform: scale(1.03);
 }
 
-/* 为 li 下的子元素设置宽度 */
 li>* {
     flex: 0 0 20%;
-    /* 前两个元素宽度 20% */
-}
-
-li> :last-child {
-    /* flex: 0 0 60%; 最后一个元素宽度 60% */
 }
 
 button {
@@ -182,15 +176,16 @@ a:hover {
 }
 
 input[type="text"],
-input[type="color"],
-textarea,
-select {
-    /* padding: 10px; */
+input[type="color"] {
+
     border: 1px solid #8fd;
     border-radius: var(--border-radius);
     width: 100%;
-    /* 修改为 100% 以适应父容器 */
-    margin-top: 5px;
+}
+
+textarea,
+select {
+    padding: 10px;
 }
 
 input[type="checkbox"],
