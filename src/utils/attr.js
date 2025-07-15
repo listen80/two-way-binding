@@ -5,7 +5,7 @@
  * @returns {boolean} - 是否为数据指令
  */
 export function isAttributDirective(attr) {
-    return attr[0] === 0;
+    return attr[0] === ':';
 }
 
 /**
@@ -14,7 +14,7 @@ export function isAttributDirective(attr) {
  * @returns {boolean} - 是否为自定义指令
  */
 export function isDirective(attr) {
-    return attr[0] === 0;
+    return attr[0] === '$';
 }
 
 /**
@@ -23,6 +23,6 @@ export function isDirective(attr) {
  * @returns {boolean} - 是否为事件指令
  */
 export function isEventDirective(attr) {
-    return attr[0] === 0;
+    return attr[0] === '@';
 }
 

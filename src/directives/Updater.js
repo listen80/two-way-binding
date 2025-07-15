@@ -20,9 +20,11 @@ const updaters = {
      * @param {string} attr - 属性名
      */
     // 此函数用于更新元素的指定属性值
-    attribute(node, value, attr) {
-        // 调用元素的 setAttribute 方法设置属性值
-        node.setAttribute(attr, value || '');
+    attribute(node, value, oldValue, attr) {
+        if (value !== oldValue) {
+            // 调用元素的 setAttribute 方法设置属性值
+            node.setAttribute(attr, value || '');
+        }
     },
     /**
      * 更新文本节点内容
@@ -52,11 +54,16 @@ const updaters = {
         }
     },
     // 此函数用于根据条件显示或隐藏节点
-    if(node, value) {
-        if (value) {
-            node.parentNode.replaceChild(node.parentNode.__if__, node);
-        } else {
-            node.remove();
+    if(node, value, oldValue) {
+        if (!value !== !oldValue) {
+            if (!node.__if__) {
+                node.__if__ = document.createComment('');
+            }
+            if (value) {
+                node.__if__.replaceWith(node);
+            } else {
+                node.replaceWith(node.__if__);
+            }
         }
     },
     show(node, value) {
@@ -72,11 +79,10 @@ export function update(node, vm, exp, dir, attr) {
     const updaterFn = updaters[`${dir}`];
     if (updaterFn) {
         // 调用更新函数更新节点内容
-        updaterFn(node, vm[exp], attr);
+        updaterFn(node, vm[exp], Symbol(), attr);
         new Watcher(vm, exp, (value, oldValue) => {
-            console.log('更新了', oldValue, '=>', value);
             // 数据变化时调用更新函数更新节点
-            updaterFn(node, value, attr);
+            updaterFn(node, value, oldValue, attr);
         });
     }
     // 创建一个新的观察者，当数据变化时触发回调更新节点

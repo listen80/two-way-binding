@@ -52,6 +52,7 @@ export function compileElement(node, vm, methods) {
         const name = attr.name;
         const exp = attr.value;
         const dir = name.substring(1);
+
         if (isDirective(name)) {
             directiveHandler(node, vm, exp, dir)
             update(node, vm, exp, dir);

@@ -20,6 +20,16 @@
                 <a :href="href">{{ href }}</a>
             </li>
             <li>
+                <span>if</span>
+                <span>{{ message }}</span>
+                <a $if="message">我在呢</a>
+            </li>
+            <li>
+                <span>show</span>
+                <span>{{ message }}</span>
+                <a $show="message">我在呢</a>
+            </li>
+            <li>
                 <span>input</span>
                 <span>{{ message }}</span>
                 <input type="text" $model="message">
@@ -78,18 +88,13 @@ export default {
         message: 'Hello, World!',
         href: './?' + Date.now(),
         number: '33',
-        title: 'This is a title',
-        myTitle: 'This is a aaa aaa bb ',
-        sss: 'This is a sss',
-        checkbox: ["1", "3"],
+        color: '#34f',
         select: '223',
-        radio: 'option1',
-        text: 'just a simple text',
-        color: '#f3c'
+        checkbox: ["1", "3"],
+        radio: '1',
     },
     methods: {
         add() {
-            console.log(this)
             this.count++;
         },
         reduce() {

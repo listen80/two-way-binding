@@ -16,7 +16,6 @@ export default class Watcher {
     }
 
     update() {
-        console.log('update', this);
         const oldValue = this.value;
         this.value = this.vm[this.expOrFn];
         this.cb.call(this.vm, this.value, oldValue);
