@@ -31,7 +31,7 @@
             </li>
             <li>
                 <span>for</span>
-                <span>{{ message }}</span>
+                <span>{{ count }}</span>
                 <div>
                     <div $for="count">
                         <a href="https://www.baidu.com">111</a>
@@ -62,9 +62,9 @@
                 <span>select</span>
                 <span>{{ select }}</span>
                 <select $model="select">
-                    <option value="22">22</option>
-                    <option value="223">223</option>
-                    <option value="224">224</option>
+                    <option value="1">1</option>
+                    <option value="2">2</option>
+                    <option value="3">3</option>
                 </select>
             </li>
             <li>
@@ -97,8 +97,8 @@ export default {
         message: 'Hello, World!',
         href: './?' + Date.now(),
         number: '33',
-        color: '#34f',
-        select: '223',
+        color: '#168128',
+        select: '1',
         checkbox: ["1", "3"],
         radio: '1',
     },
