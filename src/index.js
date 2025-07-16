@@ -1,2 +1,1 @@
-import Binding from "./core/Binding.js";
-export default Binding
+export { default as default } from "./core/Binding.js";

@@ -20,6 +20,30 @@
 ## 代码结构原理
 ### src 目录下文件作用解析
 
+新建 双向绑定组件
+component
+    props
+    componentProps
+        script
+            data
+                observe
+            methods
+            components
+        template
+            compile
+                元素节点
+                    指令解析
+                    属性解析
+                    事件解析
+                文本节点
+        style
+            mount
+    el
+        replace
+
+
+
+
 ### 双向绑定原理
 本项目借助 Vue 的双向绑定思想，通常会涉及数据劫持（如使用 `Object.defineProperty` 或 `Proxy`）来监听数据变化，
 同时监听 DOM 事件（如 `input`、`change` 等）来更新数据，

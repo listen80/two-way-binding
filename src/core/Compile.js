@@ -22,8 +22,8 @@ export default function compilerNode(el, vm, methods, components) {
                 const comment = document.createComment('');
                 node.replaceWith(comment)
                 try {
-                    const component = node.tagName.toLowerCase();
-                    new Binding({ component: components[component], el: comment })
+                    const componentName = node.tagName.toLowerCase();
+                    new Binding({ component: components[componentName], el: comment })
                 } catch (error) {
                     console.log(error)
                 }
