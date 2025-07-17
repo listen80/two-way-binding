@@ -1,13 +1,12 @@
 # two-way-binding
 
 ## 项目简介
-此项目 `two-way-binding` 主要用于实现双向绑定功能，借鉴 Vue 的核心思想，写一个简单便捷的数据绑定方案的例子。
+主要实现双向绑定功能，借鉴 Vue 的核心思想，写一个简单便捷的数据绑定方案的例子。
 
-## 项目展示
-[体验双向绑定](public/)
+## 项目演示
+[体验一下](https://listen80.github.io/two-way-binding/public/)
 
-## 快速开始项目
-
+## 开始项目
 ### 环境准备
 - 本例子使用es module,不需要babel转换，请确保浏览器支持es module
 
@@ -18,7 +17,7 @@
 - 开发依赖任意http-server即可
 
 ## 代码结构原理
-### src 目录下文件作用解析
+### 文件作用解析
 - component
   - props
   - componentProps
@@ -40,9 +39,7 @@
     - replace
 
 
-
-
 ### 双向绑定原理
-本项目借助 Vue 的双向绑定思想，通常会涉及数据劫持（如使用 `Object.defineProperty` 或 `Proxy`）来监听数据变化，
-同时监听 DOM 事件（如 `input`、`change` 等）来更新数据，
-实现数据与视图的同步更新。通过克隆项目并修改代码，开发者能直观感受这一过程。
+- 数据劫持（如使用 `Object.defineProperty`）来监听数据变化
+- 同时监听 DOM 事件（如 `input`、`change` 等）来更新数据
+- 自定义指令model快速实现上文逻辑，建立数据与视图的联系

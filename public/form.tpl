@@ -1,4 +1,5 @@
 <template>
+  <h2>Form - 子元素</h2>
   <ol>
     <li>
       <span>类型</span>
@@ -86,6 +87,8 @@
       </div>
     </li>
   </ol>
+  <button class="btn" @click="clear">赋值</button>
+  <button class="btn" @click="selectAll">全选</button>
 </template>
 <script>
   export default {
@@ -116,7 +119,19 @@
       onChange(e) {
         console.log('onChange', e);
       },
-
+      clear() {
+        this.message = 'clear';
+        this.number = '99';
+        this.color = '#3f51b5';
+        this.select = '';
+        this.checkbox = [];
+        this.radio = '';
+        this.href = './?' + Date.now();
+        this.count = 5
+      },
+      selectAll() {
+        this.checkbox = ['1', '2', '3', '4'];
+      }
     },
   }
 </script>
