@@ -82,7 +82,7 @@ export const directiveHandlerFuncs = {
      */
     if(node, vm, exp) {
         // 将节点存储在父节点的 __if__ 属性上，便于后续处理
-        node.parentNode.__if__ = node;
+        node.__if__ = document.createComment('if');
     },
     /**
      * 处理 for 指令，根据表达式的值复制节点
@@ -91,9 +91,7 @@ export const directiveHandlerFuncs = {
      * @param {string} exp - 表达式，指定复制次数
      */
     for(node, vm, exp) {
-        // 根据表达式转换后的数值，循环复制节点并添加到父节点
-        for (let i = 0; i < Number(exp); i++) {
-            node.parentNode.appendChild(node.cloneNode(true));
-        }
+        node.__for__ = document.createComment('for');
+        node.replaceWith(node.__for__)
     }
 }

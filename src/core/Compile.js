@@ -56,10 +56,13 @@ export function compileElement(node, vm, methods) {
         if (isDirective(name)) {
             directiveHandler(node, vm, exp, dir)
             update(node, vm, exp, dir);
+            node.removeAttribute(name);
         } else if (isAttributDirective(name)) {
             update(node, vm, exp, 'attribute', dir);
+            node.removeAttribute(name);
         } else if (isEventDirective(name)) {
             eventHandler(node, vm, exp, dir, methods);
+            node.removeAttribute(name);
         }
     });
 }
@@ -70,10 +73,15 @@ export function compileElement(node, vm, methods) {
  * @param {object} vm - 视图模型实例
  */
 export function compileText(node, vm) {
-    const reg = /\{\{(.*)\}\}/;
+    const reg = /\{\{(.*)\}\}/g;
     const text = node.textContent;
-    if (reg.test(text)) {
-        const exp = RegExp.$1.trim();
-        update(node, vm, exp, 'text');
-    }
+
+    text.replace(reg, (match, p1) => {
+        const exp = p1.trim()
+        update(node, vm, exp, () => {
+            node.textContent = text.replace(reg, (match, p1) => {
+                return vm[p1.trim()] ?? '';
+            });
+        });
+    });
 }

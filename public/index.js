@@ -118,7 +118,7 @@ const directiveHandlerFuncs = {
    */
   if(node, vm, exp) {
     // 将节点存储在父节点的 __if__ 属性上，便于后续处理
-    node.parentNode.__if__ = node;
+    node.__if__ = document.createComment('if');
   },
   /**
    * 处理 for 指令，根据表达式的值复制节点
@@ -127,10 +127,8 @@ const directiveHandlerFuncs = {
    * @param {string} exp - 表达式，指定复制次数
    */
   for(node, vm, exp) {
-    // 根据表达式转换后的数值，循环复制节点并添加到父节点
-    for (let i = 0; i < Number(exp); i++) {
-      node.parentNode.appendChild(node.cloneNode(true));
-    }
+    node.__for__ = document.createComment('for');
+    node.replaceWith(node.__for__);
   }
 };
 
@@ -212,7 +210,6 @@ const updaters = {
   // 此函数用于更新表单元素的值
   model(node, value) {
     // 设置表单元素的值
-    // debugger
     if (node.type === 'checkbox') {
       node.checked = value.includes(node.value);
     } else if (node.type === 'radio') {
@@ -223,32 +220,27 @@ const updaters = {
   },
   // 此函数用于根据条件显示或隐藏节点
   if(node, value, oldValue) {
-    if (!value !== !oldValue) {
-      if (!node.__if__) {
-        node.__if__ = document.createComment('');
-      }
-      if (value) {
-        node.__if__.replaceWith(node);
-      } else {
-        node.replaceWith(node.__if__);
-      }
+    if (Boolean(value) === Boolean(oldValue)) {
+      return;
     }
-  },
-  show(node, value) {
-    value ? node.style.display = '' : node.style.display = 'none';
+    if (value) {
+      node.__if__.replaceWith(node);
+    } else {
+      node.replaceWith(node.__if__);
+    }
   },
   for(node, value, oldValue) {
-    if (node.__for__) {
-      node.__for__.forEach(item => {
-        item.remove();
-      });
-    } else {
-      node.__for__ = [];
-      node.__parent__ = node.parentElement;
-      node.remove();
+    let last = node.__for__;
+    for (let i = 0; i < oldValue; i++) {
+      last.nextElementSibling?.remove();
     }
     for (let i = 0; i < value; i++) {
-      node.__for__.push(node.__parent__.appendChild(node.cloneNode(true)));
+      last.after(node.cloneNode(true));
+    }
+  },
+  show(node, value, oldValue) {
+    if (value !== oldValue) {
+      value ? node.style.display = '' : node.style.display = 'none';
     }
   }
 };
@@ -257,14 +249,14 @@ const updaters = {
 // 当数据发生变化时，观察者会触发回调函数来更新节点
 function update(node, vm, exp, dir, attr) {
   // 根据 exp 的类型确定更新函数
-  const updaterFn = updaters[`${dir}`];
+  const updaterFn = typeof dir === 'function' ? dir : updaters[`${dir}`];
   if (updaterFn) {
     // 调用更新函数更新节点内容
-    updaterFn(node, vm[exp], Symbol(), attr);
-    new Watcher(vm, exp, (value, oldValue) => {
+    const watcher = new Watcher(vm, exp, (value, oldValue) => {
       // 数据变化时调用更新函数更新节点
       updaterFn(node, value, oldValue, attr);
     });
+    watcher.update();
   }
   // 创建一个新的观察者，当数据变化时触发回调更新节点
 }
@@ -321,10 +313,13 @@ function compileElement(node, vm, methods) {
     if (isDirective(name)) {
       directiveHandler(node, vm, exp, dir);
       update(node, vm, exp, dir);
+      node.removeAttribute(name);
     } else if (isAttributDirective(name)) {
       update(node, vm, exp, 'attribute', dir);
+      node.removeAttribute(name);
     } else if (isEventDirective(name)) {
       eventHandler(node, vm, exp, dir, methods);
+      node.removeAttribute(name);
     }
   });
 }
@@ -335,12 +330,16 @@ function compileElement(node, vm, methods) {
  * @param {object} vm - 视图模型实例
  */
 function compileText(node, vm) {
-  const reg = /\{\{(.*)\}\}/;
+  const reg = /\{\{(.*)\}\}/g;
   const text = node.textContent;
-  if (reg.test(text)) {
-    const exp = RegExp.$1.trim();
-    update(node, vm, exp, 'text');
-  }
+  text.replace(reg, (match, p1) => {
+    const exp = p1.trim();
+    update(node, vm, exp, () => {
+      node.textContent = text.replace(reg, (match, p1) => {
+        return vm[p1.trim()] ?? '';
+      });
+    });
+  });
 }
 
 function defineReactive(obj, key, val) {

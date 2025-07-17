@@ -34,7 +34,7 @@
                 <span>{{ count }}</span>
                 <div>
                     <div $for="count">
-                        <a href="https://www.baidu.com">111</a>
+                        <a href="https://www.baidu.com">我是一个重复元素</a>
                     </div>
                 </div>
             </li>
@@ -93,7 +93,7 @@
 <script>
 export default {
     data: {
-        count: 0,
+        count: 2,
         message: 'Hello, World!',
         href: './?' + Date.now(),
         number: '33',
