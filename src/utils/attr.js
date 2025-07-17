@@ -4,7 +4,7 @@
  * @param {string} attr - 属性名
  * @returns {boolean} - 是否为数据指令
  */
-export function isAttributDirective(attr) {
+export function isAttributeDirective(attr) {
     return attr[0] === ':';
 }
 

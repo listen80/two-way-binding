@@ -1,6 +1,7 @@
 <template>
   <div class="app">
     <h1>双向绑定示例 {{ message }}</h1>
+    <h4>{{ text }}</h4>
     <x-form></x-form>
     <x-table></x-table>
   </div>
@@ -8,8 +9,7 @@
 <script>
   export default {
     data: {
-      message: 'Hello, World!',
-
+      text: 'A good day',
     },
     components: {
       'x-table': 'table',

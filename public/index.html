@@ -19,7 +19,6 @@
             color: var(--text-color);
             background-color: #f9f9f9;
             margin: 0;
-            /* padding: 20px; */
             display: flex;
             justify-content: center;
             min-height: 100vh;
@@ -30,10 +29,13 @@
 <body>
     <div id="app"></div>
     <script type="module">
-        import TwoWay from './index.js';
+        import Binding from './index.js';
 
-        new TwoWay({
+        new Binding({
             component: './main.tpl',
+            props: {
+                message: 'Hello World!',
+            },
             el: document.querySelector('#app')
         })
     </script>

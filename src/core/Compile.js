@@ -1,4 +1,4 @@
-import { isDirective, isEventDirective, isAttributDirective } from '../utils/attr.js';
+import { isDirective, isEventDirective, isAttributeDirective } from '../utils/attr.js';
 import { eventHandler } from '../directives/EventBinder.js';
 import { directiveHandler } from '../directives/DirectiveHandler.js';
 import { update } from '../directives/Updater.js';
@@ -13,32 +13,32 @@ import Binding from './Binding.js';
  * @param {object} vm - 视图模型实例
  */
 export default function compilerNode(el, vm, methods, components) {
-    const childNodes = el.childNodes;
+  const childNodes = el.childNodes;
 
-    Array.from(childNodes).forEach(node => {
-        if (node.nodeType === 1) {
-            if (node.tagName.includes('-')) {
-                // console.log(node.tagName)
-                const comment = document.createComment('');
-                node.replaceWith(comment)
-                try {
-                    const componentName = node.tagName.toLowerCase();
-                    new Binding({ component: components[componentName], el: comment })
-                } catch (error) {
-                    console.log(error)
-                }
-            } else {
-                compileElement(node, vm, methods, components);
-
-            }
-        } else if (node.nodeType === 3) {
-            compileText(node, vm);
+  Array.from(childNodes).forEach(node => {
+    if (node.nodeType === 1) {
+      if (node.tagName.includes('-')) {
+        // console.log(node.tagName)
+        const comment = document.createComment('');
+        node.replaceWith(comment)
+        try {
+          const componentName = node.tagName.toLowerCase();
+          new Binding({ component: components[componentName], el: comment })
+        } catch (error) {
+          console.log(error)
         }
-        if (node.childNodes && node.childNodes.length) {
-            compilerNode(node, vm, methods, components);
+      } else {
+        compileElement(node, vm, methods, components);
 
-        }
-    });
+      }
+    } else if (node.nodeType === 3) {
+      compileText(node, vm);
+    }
+    if (node.childNodes && node.childNodes.length) {
+      compilerNode(node, vm, methods, components);
+
+    }
+  });
 }
 
 /**
@@ -47,24 +47,24 @@ export default function compilerNode(el, vm, methods, components) {
  * @param {object} vm - 视图模型实例
  */
 export function compileElement(node, vm, methods) {
-    const attrs = node.attributes;
-    Array.from(attrs).forEach(attr => {
-        const name = attr.name;
-        const exp = attr.value;
-        const dir = name.substring(1);
+  const attrs = node.attributes;
+  Array.from(attrs).forEach(attr => {
+    const name = attr.name;
+    const exp = attr.value;
+    const dir = name.substring(1);
 
-        if (isDirective(name)) {
-            directiveHandler(node, vm, exp, dir)
-            update(node, vm, exp, dir);
-            node.removeAttribute(name);
-        } else if (isAttributDirective(name)) {
-            update(node, vm, exp, 'attribute', dir);
-            node.removeAttribute(name);
-        } else if (isEventDirective(name)) {
-            eventHandler(node, vm, exp, dir, methods);
-            node.removeAttribute(name);
-        }
-    });
+    if (isDirective(name)) {
+      directiveHandler(node, vm, exp, dir)
+      update(node, vm, exp, dir);
+      node.removeAttribute(name);
+    } else if (isAttributeDirective(name)) {
+      update(node, vm, exp, 'attribute', dir);
+      node.removeAttribute(name);
+    } else if (isEventDirective(name)) {
+      eventHandler(node, vm, exp, dir, methods);
+      node.removeAttribute(name);
+    }
+  });
 }
 
 /**
@@ -73,15 +73,15 @@ export function compileElement(node, vm, methods) {
  * @param {object} vm - 视图模型实例
  */
 export function compileText(node, vm) {
-    const reg = /\{\{(.*)\}\}/g;
-    const text = node.textContent;
+  const reg = /\{\{(.*)\}\}/g;
+  const text = node.textContent;
 
-    text.replace(reg, (match, p1) => {
-        const exp = p1.trim()
-        update(node, vm, exp, () => {
-            node.textContent = text.replace(reg, (match, p1) => {
-                return vm[p1.trim()] ?? '';
-            });
-        });
+  text.replace(reg, (match, p1) => {
+    const exp = p1.trim()
+    update(node, vm, exp, () => {
+      node.textContent = text.replace(reg, (match, p1) => {
+        return vm[p1.trim()] ?? '';
+      });
     });
+  });
 }

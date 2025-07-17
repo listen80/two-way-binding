@@ -1,16 +1,16 @@
 // 依赖收集器
 class Dep {
-    constructor() {
-        this.subs = [];
-    }
+  constructor() {
+    this.subs = [];
+  }
 
-    addSub(sub) {
-        this.subs.push(sub);
-    }
+  addSub(sub) {
+    this.subs.push(sub);
+  }
 
-    notify() {
-        this.subs.forEach(sub => sub.update());
-    }
+  notify() {
+    this.subs.forEach(sub => sub.update());
+  }
 }
 
 Dep.target = null;

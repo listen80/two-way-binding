@@ -3,7 +3,7 @@
  * @param {string} attr - 属性名
  * @returns {boolean} - 是否为数据指令
  */
-function isAttributDirective(attr) {
+function isAttributeDirective(attr) {
   return attr[0] === ':';
 }
 
@@ -314,7 +314,7 @@ function compileElement(node, vm, methods) {
       directiveHandler(node, vm, exp, dir);
       update(node, vm, exp, dir);
       node.removeAttribute(name);
-    } else if (isAttributDirective(name)) {
+    } else if (isAttributeDirective(name)) {
       update(node, vm, exp, 'attribute', dir);
       node.removeAttribute(name);
     } else if (isEventDirective(name)) {

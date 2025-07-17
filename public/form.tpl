@@ -108,7 +108,7 @@
       },
       changeMessage() {
         if (this.message === 'Message changed!') {
-          this.message = 'Hello, Vue!';
+          this.message = 'Hello, Demo!';
           return;
         }
         this.message = 'Message changed!';
