@@ -19,27 +19,25 @@
 
 ## 代码结构原理
 ### src 目录下文件作用解析
-
-新建 双向绑定组件
-component
-    props
-    componentProps
-        script
-            data
-                observe
-            methods
-            components
-        template
-            compile
-                元素节点
-                    指令解析
-                    属性解析
-                    事件解析
-                文本节点
-        style
-            mount
-    el
-        replace
+- component
+  - props
+  - componentProps
+    - script
+      - data
+        - observe
+      - methods
+      - components
+    - template
+      - compile
+        - 元素节点
+          - 指令解析
+          - 属性解析
+          - 事件解析
+        - 文本节点
+    - style
+      - mount
+  - el
+    - replace
 
 
 
