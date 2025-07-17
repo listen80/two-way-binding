@@ -1,4 +1,4 @@
-import { isEventDirective, isEventDirective, isAttributeDirective } from '../utils/attr.js';
+import { isCustomDirective, isEventDirective, isAttributeDirective } from '../utils/attr.js';
 import { eventHandler } from '../directives/EventBinder.js';
 import { directiveHandler } from '../directives/DirectiveHandler.js';
 import { update } from '../directives/Updater.js';
@@ -53,7 +53,7 @@ export function compileElement(node, vm, methods) {
     const exp = attr.value;
     const dir = name.substring(1);
 
-    if (isEventDirective(name)) {
+    if (isCustomDirective(name)) {
       directiveHandler(node, vm, exp, dir)
       update(node, vm, exp, dir);
       node.removeAttribute(name);

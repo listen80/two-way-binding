@@ -8,21 +8,21 @@ function isAttributeDirective(attr) {
 }
 
 /**
- * 判断属性是否为自定义指令
- * @param {string} attr - 属性名
- * @returns {boolean} - 是否为自定义指令
- */
-function isDirective(attr) {
-  return attr[0] === '$';
-}
-
-/**
  * 判断属性是否为事件指令
  * @param {string} attr - 属性名
  * @returns {boolean} - 是否为事件指令
  */
 function isEventDirective(attr) {
   return attr[0] === '@';
+}
+
+/**
+ * 判断属性是否为自定义指令
+ * @param {string} attr - 属性名
+ * @returns {boolean} - 是否为自定义指令
+ */
+function isCustomDirective(attr) {
+  return attr[0] === '$';
 }
 
 /**
@@ -310,7 +310,7 @@ function compileElement(node, vm, methods) {
     const name = attr.name;
     const exp = attr.value;
     const dir = name.substring(1);
-    if (isDirective(name)) {
+    if (isCustomDirective(name)) {
       directiveHandler(node, vm, exp, dir);
       update(node, vm, exp, dir);
       node.removeAttribute(name);

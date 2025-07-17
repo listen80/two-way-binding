@@ -28,4 +28,37 @@
     max-width: 800px;
     margin: 20px;
   }
+
+  button {
+    background-color: var(--primary-color);
+    color: white;
+    border: none;
+    padding: 10px 20px;
+    border-radius: var(--border-radius);
+    cursor: pointer;
+    transition: background-color 0.3s;
+  }
+
+  button:hover {
+    background-color: #369f6d;
+  }
+
+  button:focus {
+    outline: 2px solid var(--primary-color);
+  }
+
+  a {
+    color: var(--primary-color);
+    text-decoration: none;
+    transition: color 0.3s;
+  }
+
+  a:hover {
+    color: #369f6d;
+  }
+
+  a:focus {
+    outline: 2px solid var(--primary-color);
+    color: var(--primary-color);
+  }
 </style>
