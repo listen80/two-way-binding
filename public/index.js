@@ -418,9 +418,15 @@ class Binding {
       configurable: false
     });
     // 从配置选项中解构出组件路径
-    const {
+    let {
       component
     } = this.options;
+
+    // 处理组件路径
+    const suffix = '.tpl';
+    if (!component.includes(suffix)) {
+      component = component + suffix;
+    }
     // 加载组件相关属性
     const componentProperties = loadComponent(component);
     // 定义不可变的 componentProperties 属性，存储组件相关属性
