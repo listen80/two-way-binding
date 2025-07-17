@@ -1,94 +1,92 @@
 <template>
   <h2>Form - 子元素</h2>
-  <form action="javascript:void(0);">
-    <ol>
-      <li>
-        <span>类型</span>
-        <span>值</span>
-        <span>元素</span>
-      </li>
-      <li>
-        <span>文本/事件</span>
-        <span>{{ count }}</span>
-        <div>
-          <button @click="add">add</button>
-          <button @click="reduce">reduce</button>
+  <ol>
+    <li>
+      <span>类型</span>
+      <span>值</span>
+      <span>元素</span>
+    </li>
+    <li>
+      <span>文本/事件</span>
+      <span>{{ count }}</span>
+      <div>
+        <button @click="add">add</button>
+        <button @click="reduce">reduce</button>
+      </div>
+    </li>
+    <li>
+      <span>属性(a标签)</span>
+      <span>{{ href }}</span>
+      <a :href="href">{{ href }}</a>
+    </li>
+    <li>
+      <span>if</span>
+      <span>{{ message }}</span>
+      <a $if="message">我在呢</a>
+    </li>
+    <li>
+      <span>show</span>
+      <span>{{ message }}</span>
+      <a $show="message">我在呢</a>
+    </li>
+    <li>
+      <span>for</span>
+      <span>{{ count }}</span>
+      <div>
+        <div $for="count">
+          <a href="https://www.baidu.com">我是一个重复元素</a>
         </div>
-      </li>
-      <li>
-        <span>属性(a标签)</span>
-        <span>{{ href }}</span>
-        <a :href="href">{{ href }}</a>
-      </li>
-      <li>
-        <span>if</span>
-        <span>{{ message }}</span>
-        <a $if="message">我在呢</a>
-      </li>
-      <li>
-        <span>show</span>
-        <span>{{ message }}</span>
-        <a $show="message">我在呢</a>
-      </li>
-      <li>
-        <span>for</span>
-        <span>{{ count }}</span>
-        <div>
-          <div $for="count">
-            <a href="https://www.baidu.com">我是一个重复元素</a>
-          </div>
-        </div>
-      </li>
-      <li>
-        <span>input</span>
-        <span>{{ message }}</span>
-        <input type="text" $model="message">
-      </li>
-      <li>
-        <span>textarea</span>
-        <span>{{ message }}</span>
-        <textarea $model="message"></textarea>
-      </li>
-      <li>
-        <span>number</span>
-        <span>{{ number }}</span>
-        <input type="number" $model="number">
-      </li>
-      <li>
-        <span>color</span>
-        <span>{{ color }}</span>
-        <input type="color" $model="color">
-      </li>
-      <li>
-        <span>select</span>
-        <span>{{ select }}</span>
-        <select $model="select">
-          <option value="1">1</option>
-          <option value="2">2</option>
-          <option value="3">3</option>
-        </select>
-      </li>
-      <li>
-        <span>checkbox</span>
-        <span>{{ checkbox }}</span>
-        <div>
-          <input type="checkbox" value="1" $model="checkbox">
-          <input type="checkbox" value="2" $model="checkbox">
-          <input type="checkbox" value="3" $model="checkbox">
-          <input type="checkbox" value="4" $model="checkbox">
-        </div>
-      </li>
-      <li>
-        <span>radio</span>
-        <span>{{ radio }}</span>
-        <div>
-          <input type="radio" value="1" $model="radio">
-          <input type="radio" value="2" $model="radio">
-          <input type="radio" value="3" $model="radio">
-        </div>
-      </li>
-    </ol>
-  </form>
+      </div>
+    </li>
+    <li>
+      <span>input</span>
+      <span>{{ message }}</span>
+      <input type="text" $model="message">
+    </li>
+    <li>
+      <span>textarea</span>
+      <span>{{ message }}</span>
+      <textarea $model="message"></textarea>
+    </li>
+    <li>
+      <span>number</span>
+      <span>{{ number }}</span>
+      <input type="number" $model="number">
+    </li>
+    <li>
+      <span>color</span>
+      <span>{{ color }}</span>
+      <input type="color" $model="color">
+    </li>
+    <li>
+      <span>select</span>
+      <span>{{ select }}</span>
+      <select $model="select">
+        <option value="1">1</option>
+        <option value="2">2</option>
+        <option value="3">3</option>
+      </select>
+    </li>
+    <li>
+      <span>checkbox</span>
+      <span>{{ checkbox }}</span>
+      <div>
+        <input type="checkbox" value="1" $model="checkbox">
+        <input type="checkbox" value="2" $model="checkbox">
+        <input type="checkbox" value="3" $model="checkbox">
+        <input type="checkbox" value="4" $model="checkbox">
+      </div>
+    </li>
+    <li>
+      <span>radio</span>
+      <span>{{ radio }}</span>
+      <div>
+        <input type="radio" value="1" $model="radio">
+        <input type="radio" value="2" $model="radio">
+        <input type="radio" value="3" $model="radio">
+      </div>
+    </li>
+  </ol>
   <button class="btn" @click="clear">赋值</button>
   <button class="btn" @click="selectAll">全选</button>
 </template>
