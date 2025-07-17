@@ -3,6 +3,52 @@ import { eventHandler } from '../directives/EventBinder.js';
 import { directiveHandler } from '../directives/DirectiveHandler.js';
 import { update } from '../directives/Updater.js';
 import Binding from './Binding.js';
+
+/**
+ * 编译元素节点，处理元素的属性
+ * @param {HTMLElement} node - 要编译的元素节点
+ * @param {object} vm - 视图模型实例
+ */
+function compileElement(node, vm, methods) {
+  const attrs = node.attributes;
+  Array.from(attrs).forEach(attr => {
+    const name = attr.name;
+    const exp = attr.value;
+    const dir = name.substring(1);
+
+    if (isCustomDirective(name)) {
+      directiveHandler(node, vm, exp, dir)
+      update(node, vm, exp, dir);
+      node.removeAttribute(name);
+    } else if (isAttributeDirective(name)) {
+      update(node, vm, exp, 'attribute', dir);
+      node.removeAttribute(name);
+    } else if (isEventDirective(name)) {
+      eventHandler(node, vm, exp, dir, methods);
+      node.removeAttribute(name);
+    }
+  });
+}
+
+/**
+ * 编译文本节点，处理文本中的插值表达式
+ * @param {Text} node - 要编译的文本节点
+ * @param {object} vm - 视图模型实例
+ */
+function compileText(node, vm) {
+  const reg = /\{\{(.*)\}\}/g;
+  const text = node.textContent;
+
+  text.replace(reg, (match, p1) => {
+    const exp = p1.trim()
+    update(node, vm, exp, () => {
+      node.textContent = text.replace(reg, (match, p1) => {
+        return vm[p1.trim()] ?? '';
+      });
+    });
+  });
+}
+
 /**
  * 将 DOM 元素转换为文档片段
  * @param {HTMLElement} el - 要转换的 DOM 元素
@@ -38,50 +84,5 @@ export default function compilerNode(el, vm, methods, components) {
       compilerNode(node, vm, methods, components);
 
     }
-  });
-}
-
-/**
- * 编译元素节点，处理元素的属性
- * @param {HTMLElement} node - 要编译的元素节点
- * @param {object} vm - 视图模型实例
- */
-export function compileElement(node, vm, methods) {
-  const attrs = node.attributes;
-  Array.from(attrs).forEach(attr => {
-    const name = attr.name;
-    const exp = attr.value;
-    const dir = name.substring(1);
-
-    if (isCustomDirective(name)) {
-      directiveHandler(node, vm, exp, dir)
-      update(node, vm, exp, dir);
-      node.removeAttribute(name);
-    } else if (isAttributeDirective(name)) {
-      update(node, vm, exp, 'attribute', dir);
-      node.removeAttribute(name);
-    } else if (isEventDirective(name)) {
-      eventHandler(node, vm, exp, dir, methods);
-      node.removeAttribute(name);
-    }
-  });
-}
-
-/**
- * 编译文本节点，处理文本中的插值表达式
- * @param {Text} node - 要编译的文本节点
- * @param {object} vm - 视图模型实例
- */
-export function compileText(node, vm) {
-  const reg = /\{\{(.*)\}\}/g;
-  const text = node.textContent;
-
-  text.replace(reg, (match, p1) => {
-    const exp = p1.trim()
-    update(node, vm, exp, () => {
-      node.textContent = text.replace(reg, (match, p1) => {
-        return vm[p1.trim()] ?? '';
-      });
-    });
   });
 }

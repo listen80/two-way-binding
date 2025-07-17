@@ -15,19 +15,8 @@ const inputTypes = [
   'select-multiple', 'select-one', 'select'
 ]
 
-/**
- * 指令处理器，根据指令类型调用对应的处理函数
- * @param {HTMLElement} node - 要处理的节点
- * @param {object} vm - 视图模型实例
- * @param {string} exp - 表达式
- * @param {string} dir - 指令类型
- */
-export const directiveHandler = (node, vm, exp, dir) => {
-  directiveHandlerFuncs[dir]?.(node, vm, exp);
-}
-
 // 导出指令对象，包含 model、if 和 for 指令的处理函数
-export const directiveHandlerFuncs = {
+const directiveHandlerFuncs = {
   /**
    * 处理 model 指令，实现表单元素与视图模型数据的双向绑定
    * @param {HTMLInputElement|HTMLSelectElement|HTMLTextAreaElement} node - 要处理的表单元素
@@ -94,4 +83,15 @@ export const directiveHandlerFuncs = {
     node.__for__ = document.createComment('for');
     node.replaceWith(node.__for__)
   }
+}
+
+/**
+ * 指令处理器，根据指令类型调用对应的处理函数
+ * @param {HTMLElement} node - 要处理的节点
+ * @param {object} vm - 视图模型实例
+ * @param {string} exp - 表达式
+ * @param {string} dir - 指令类型
+ */
+export const directiveHandler = (node, vm, exp, dir) => {
+  directiveHandlerFuncs[dir]?.(node, vm, exp);
 }

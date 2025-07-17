@@ -51,17 +51,6 @@ const specialTypes = ['checkbox', 'radio', 'select-one'];
 // 定义普通输入类型的数组，这些类型在处理 model 指令时监听 input 事件
 const inputTypes = ['text', 'password', 'email', 'tel', 'url', 'number', 'range', 'date', 'datetime-local', 'month', 'week', 'time', 'color', 'search', 'image', 'textarea', 'select-multiple', 'select-one', 'select'];
 
-/**
- * 指令处理器，根据指令类型调用对应的处理函数
- * @param {HTMLElement} node - 要处理的节点
- * @param {object} vm - 视图模型实例
- * @param {string} exp - 表达式
- * @param {string} dir - 指令类型
- */
-const directiveHandler = (node, vm, exp, dir) => {
-  directiveHandlerFuncs[dir]?.(node, vm, exp);
-};
-
 // 导出指令对象，包含 model、if 和 for 指令的处理函数
 const directiveHandlerFuncs = {
   /**
@@ -132,6 +121,17 @@ const directiveHandlerFuncs = {
   }
 };
 
+/**
+ * 指令处理器，根据指令类型调用对应的处理函数
+ * @param {HTMLElement} node - 要处理的节点
+ * @param {object} vm - 视图模型实例
+ * @param {string} exp - 表达式
+ * @param {string} dir - 指令类型
+ */
+const directiveHandler = (node, vm, exp, dir) => {
+  directiveHandlerFuncs[dir]?.(node, vm, exp);
+};
+
 // 依赖收集器
 class Dep {
   constructor() {
@@ -167,16 +167,6 @@ class Watcher {
 }
 
 // 该引用可能需要调整，Watcher.js 在 reactivity 目录下
-
-/**
- * 更新节点内容并添加观察者
- * @param {Node} node - 要更新的节点
- * @param {object} vm - 视图模型实例
- * @param {string|function} exp - 表达式或更新函数
- * @param {string} dir - 指令类型
- * @param {string} [attr] - 属性名（可选）
- */
-
 // 定义各种更新函数的对象
 const updaters = {
   /**
@@ -245,6 +235,15 @@ const updaters = {
   }
 };
 
+/**
+ * 更新节点内容并添加观察者
+ * @param {Node} node - 要更新的节点
+ * @param {object} vm - 视图模型实例
+ * @param {string|function} exp - 表达式或更新函数
+ * @param {string} dir - 指令类型
+ * @param {string} [attr] - 属性名（可选）
+ */
+
 // 此函数的作用是更新节点内容，并且为节点添加观察者
 // 当数据发生变化时，观察者会触发回调函数来更新节点
 function update(node, vm, exp, dir, attr) {
@@ -259,44 +258,6 @@ function update(node, vm, exp, dir, attr) {
     watcher.update();
   }
   // 创建一个新的观察者，当数据变化时触发回调更新节点
-}
-
-/**
- * 将 DOM 元素转换为文档片段
- * @param {HTMLElement} el - 要转换的 DOM 元素
- * @returns {DocumentFragment} - 转换后的文档片段
-/**
- * 编译文档片段或 DOM 节点
- * @param {Node} el - 要编译的节点
- * @param {object} vm - 视图模型实例
- */
-function compilerNode(el, vm, methods, components) {
-  const childNodes = el.childNodes;
-  Array.from(childNodes).forEach(node => {
-    if (node.nodeType === 1) {
-      if (node.tagName.includes('-')) {
-        // console.log(node.tagName)
-        const comment = document.createComment('');
-        node.replaceWith(comment);
-        try {
-          const componentName = node.tagName.toLowerCase();
-          new Binding({
-            component: components[componentName],
-            el: comment
-          });
-        } catch (error) {
-          console.log(error);
-        }
-      } else {
-        compileElement(node, vm, methods);
-      }
-    } else if (node.nodeType === 3) {
-      compileText(node, vm);
-    }
-    if (node.childNodes && node.childNodes.length) {
-      compilerNode(node, vm, methods, components);
-    }
-  });
 }
 
 /**
@@ -339,6 +300,44 @@ function compileText(node, vm) {
         return vm[p1.trim()] ?? '';
       });
     });
+  });
+}
+
+/**
+ * 将 DOM 元素转换为文档片段
+ * @param {HTMLElement} el - 要转换的 DOM 元素
+ * @returns {DocumentFragment} - 转换后的文档片段
+/**
+ * 编译文档片段或 DOM 节点
+ * @param {Node} el - 要编译的节点
+ * @param {object} vm - 视图模型实例
+ */
+function compilerNode(el, vm, methods, components) {
+  const childNodes = el.childNodes;
+  Array.from(childNodes).forEach(node => {
+    if (node.nodeType === 1) {
+      if (node.tagName.includes('-')) {
+        // console.log(node.tagName)
+        const comment = document.createComment('');
+        node.replaceWith(comment);
+        try {
+          const componentName = node.tagName.toLowerCase();
+          new Binding({
+            component: components[componentName],
+            el: comment
+          });
+        } catch (error) {
+          console.log(error);
+        }
+      } else {
+        compileElement(node, vm, methods);
+      }
+    } else if (node.nodeType === 3) {
+      compileText(node, vm);
+    }
+    if (node.childNodes && node.childNodes.length) {
+      compilerNode(node, vm, methods, components);
+    }
   });
 }
 

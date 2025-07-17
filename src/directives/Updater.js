@@ -1,16 +1,5 @@
 // 该引用可能需要调整，Watcher.js 在 reactivity 目录下
 import Watcher from '../reactivity/Watcher.js';
-
-/**
- * 更新节点内容并添加观察者
- * @param {Node} node - 要更新的节点
- * @param {object} vm - 视图模型实例
- * @param {string|function} exp - 表达式或更新函数
- * @param {string} dir - 指令类型
- * @param {string} [attr] - 属性名（可选）
- */
-
-
 // 定义各种更新函数的对象
 const updaters = {
   /**
@@ -79,6 +68,14 @@ const updaters = {
   },
 }
 
+/**
+ * 更新节点内容并添加观察者
+ * @param {Node} node - 要更新的节点
+ * @param {object} vm - 视图模型实例
+ * @param {string|function} exp - 表达式或更新函数
+ * @param {string} dir - 指令类型
+ * @param {string} [attr] - 属性名（可选）
+ */
 
 // 此函数的作用是更新节点内容，并且为节点添加观察者
 // 当数据发生变化时，观察者会触发回调函数来更新节点
