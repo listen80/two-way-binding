@@ -9,12 +9,14 @@
 ## 开始项目
 ### 环境准备
 - 本例子使用es module,不需要babel转换，请确保浏览器支持es module
+- 本例子使用原生css，不使用任何css框架
+- 本例子使用template标签，template标签的内容会插入到页面中。
 
 ### 依赖
 - 本项目使用yarn,也可以使用npm
-- 本项目没有使用构建工具
+- 本项目使用rollup构建
+- 本项目没有任何运行时依赖
 - 本项目没有使用任何框架
-- 开发依赖任意http-server即可
 
 ## 代码结构原理
 ### 文件作用解析
@@ -28,11 +30,12 @@
       - components
     - template
       - compile
-        - 元素节点
-          - 指令解析
-          - 属性解析
-          - 事件解析
-        - 文本节点
+        - Element nodes
+          - Directive parsing
+          - Attribute parsing
+          - Event parsing
+        - Text nodes
+          - Expression parsing
     - style
       - mount
   - el
