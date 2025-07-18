@@ -1,9 +1,3 @@
-/**
- * 处理 `model` 指令，实现双向数据绑定
- * @param {HTMLInputElement|HTMLSelectElement|HTMLTextAreaElement} node - 要处理的表单元素
- * @param {object} vm - 视图模型实例
- * @param {string} exp - 表达式
- */
 // 定义特殊输入类型的数组，这些类型在处理 model 指令时会有特定逻辑
 const specialTypes = [
   'checkbox', 'radio', 'select-one'
