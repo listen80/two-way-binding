@@ -1,6 +1,7 @@
 import { isCustomDirective, isEventDirective, isAttributeDirective } from '../utils/attr.js';
 import { eventHandler } from '../directives/EventBinder.js';
 import { directiveHandler } from '../directives/DirectiveHandler.js';
+import { attributeHandler } from '../directives/AttributeHandler.js';
 import { update } from '../directives/Updater.js';
 import Binding from './Binding.js';
 
@@ -17,15 +18,18 @@ function compileElement(node, vm, methods) {
     const dir = name.substring(1);
 
     if (isCustomDirective(name)) {
-      directiveHandler(node, vm, exp, dir)
-      update(node, vm, exp, dir);
+      const updaterFn = update(node, vm, exp, dir);
+      directiveHandler(node, vm, exp, dir, updaterFn)
       node.removeAttribute(name);
     } else if (isAttributeDirective(name)) {
-      update(node, vm, exp, 'attribute', dir);
+      const updaterFn = update(node, vm, exp, 'attribute', dir);
+      attributeHandler(node, vm, exp, dir, updaterFn)
       node.removeAttribute(name);
     } else if (isEventDirective(name)) {
       eventHandler(node, vm, exp, dir, methods);
       node.removeAttribute(name);
+    } else {
+      // 正常属性
     }
   });
 }
@@ -41,11 +45,12 @@ function compileText(node, vm) {
 
   text.replace(reg, (match, p1) => {
     const exp = p1.trim()
-    update(node, vm, exp, () => {
+    const updaterFn = update(node, vm, exp, () => {
       node.textContent = text.replace(reg, (match, p1) => {
         return vm[p1.trim()] ?? '';
       });
     });
+    updaterFn(node, vm[exp], text);
   });
 }
 
@@ -64,7 +69,6 @@ export default function compilerNode(el, vm, methods, components) {
   Array.from(childNodes).forEach(node => {
     if (node.nodeType === 1) {
       if (node.tagName.includes('-')) {
-        // console.log(node.tagName)
         const comment = document.createComment('');
         node.replaceWith(comment)
         try {

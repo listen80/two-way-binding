@@ -31,14 +31,16 @@ const updaters = {
    * @param {any} value - 新的值
    */
   // 此函数用于更新表单元素的值
-  model(node, value) {
-    // 设置表单元素的值
-    if (node.type === 'checkbox') {
-      node.checked = value.includes(node.value);
-    } else if (node.type === 'radio') {
-      node.checked = value === node.value;
-    } else {
-      node.value = value;
+  model(node, value, oldValue) {
+    if (value !== oldValue) {
+      // 设置表单元素的值
+      if (node.type === 'checkbox') {
+        node.checked = value.includes(node.value);
+      } else if (node.type === 'radio') {
+        node.checked = value === node.value;
+      } else {
+        node.value = value;
+      }
     }
   },
   // 此函数用于根据条件显示或隐藏节点
@@ -55,14 +57,15 @@ const updaters = {
   for(node, value, oldValue) {
     let last = node.__for__;
     for (let i = 0; i < oldValue; i++) {
-      last.nextElementSibling?.remove()
+      last.nextElementSibling.remove()
     }
     for (let i = 0; i < value; i++) {
       last.after(node.cloneNode(true));
+      last = last.nextElementSibling;
     }
   },
   show(node, value, oldValue) {
-    if (value !== oldValue) {
+    if (Boolean(value) === Boolean(oldValue)) {
       value ? node.style.display = '' : node.style.display = 'none';
     }
   },
@@ -88,7 +91,6 @@ export function update(node, vm, exp, dir, attr) {
       // 数据变化时调用更新函数更新节点
       updaterFn(node, value, oldValue, attr);
     });
-    watcher.update()
   }
-  // 创建一个新的观察者，当数据变化时触发回调更新节点
+  return updaterFn;
 }

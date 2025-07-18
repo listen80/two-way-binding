@@ -23,7 +23,7 @@ const directiveHandlerFuncs = {
    * @param {object} vm - 视图模型实例
    * @param {string} exp - 表达式，用于指定视图模型中的数据属性
    */
-  model(node, vm, exp) {
+  model(node, vm, exp, updaterFn) {
     // 调用 update 函数更新节点，传入节点、视图模型、表达式和指令类型
     // update(node, vm, exp, 'model');
     // 如果节点类型属于普通输入类型，监听 input 事件
@@ -38,9 +38,6 @@ const directiveHandlerFuncs = {
       node.addEventListener('change', (e) => {
         // 当事件触发时，根据不同类型处理表单元素的值并赋值给视图模型中的对应属性
         if (node.type === 'checkbox') {
-          // if (!Array.isArray(vm[exp])) {
-          //     vm[exp] = [];
-          // }
           // 若当前值已存在于数组中则移除，否则添加
           if (vm[exp].includes(e.target.getAttribute('value'))) {
             vm[exp].splice(vm[exp].indexOf(e.target.getAttribute('value')), 1);
@@ -62,6 +59,7 @@ const directiveHandlerFuncs = {
     else {
       console.warn(`Unsupported input type: ${node.type}`);
     }
+    updaterFn(node, vm[exp], '');
   },
   /**
    * 处理 if 指令，根据表达式的值决定节点的显示与隐藏
@@ -69,9 +67,10 @@ const directiveHandlerFuncs = {
    * @param {object} vm - 视图模型实例
    * @param {string} exp - 表达式，用于判断节点是否显示
    */
-  if(node, vm, exp) {
+  if(node, vm, exp, updaterFn) {
     // 将节点存储在父节点的 __if__ 属性上，便于后续处理
     node.__if__ = document.createComment('if');
+    updaterFn(node, vm[exp], true);
   },
   /**
    * 处理 for 指令，根据表达式的值复制节点
@@ -79,9 +78,10 @@ const directiveHandlerFuncs = {
    * @param {object} vm - 视图模型实例
    * @param {string} exp - 表达式，指定复制次数
    */
-  for(node, vm, exp) {
+  for(node, vm, exp, updaterFn) {
     node.__for__ = document.createComment('for');
-    node.replaceWith(node.__for__)
+    node.replaceWith(node.__for__);
+    updaterFn(node, vm[exp], 0);
   }
 }
 
@@ -92,6 +92,6 @@ const directiveHandlerFuncs = {
  * @param {string} exp - 表达式
  * @param {string} dir - 指令类型
  */
-export const directiveHandler = (node, vm, exp, dir) => {
-  directiveHandlerFuncs[dir]?.(node, vm, exp);
+export const directiveHandler = (node, vm, exp, dir, updaterFn) => {
+  directiveHandlerFuncs[dir]?.(node, vm, exp, updaterFn);
 }

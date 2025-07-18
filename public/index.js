@@ -59,7 +59,7 @@ const directiveHandlerFuncs = {
    * @param {object} vm - 视图模型实例
    * @param {string} exp - 表达式，用于指定视图模型中的数据属性
    */
-  model(node, vm, exp) {
+  model(node, vm, exp, updaterFn) {
     // 调用 update 函数更新节点，传入节点、视图模型、表达式和指令类型
     // update(node, vm, exp, 'model');
     // 如果节点类型属于普通输入类型，监听 input 事件
@@ -74,9 +74,6 @@ const directiveHandlerFuncs = {
       node.addEventListener('change', e => {
         // 当事件触发时，根据不同类型处理表单元素的值并赋值给视图模型中的对应属性
         if (node.type === 'checkbox') {
-          // if (!Array.isArray(vm[exp])) {
-          //     vm[exp] = [];
-          // }
           // 若当前值已存在于数组中则移除，否则添加
           if (vm[exp].includes(e.target.getAttribute('value'))) {
             vm[exp].splice(vm[exp].indexOf(e.target.getAttribute('value')), 1);
@@ -98,6 +95,7 @@ const directiveHandlerFuncs = {
     else {
       console.warn(`Unsupported input type: ${node.type}`);
     }
+    updaterFn(node, vm[exp], '');
   },
   /**
    * 处理 if 指令，根据表达式的值决定节点的显示与隐藏
@@ -105,9 +103,10 @@ const directiveHandlerFuncs = {
    * @param {object} vm - 视图模型实例
    * @param {string} exp - 表达式，用于判断节点是否显示
    */
-  if(node, vm, exp) {
+  if(node, vm, exp, updaterFn) {
     // 将节点存储在父节点的 __if__ 属性上，便于后续处理
     node.__if__ = document.createComment('if');
+    updaterFn(node, vm[exp], true);
   },
   /**
    * 处理 for 指令，根据表达式的值复制节点
@@ -115,9 +114,10 @@ const directiveHandlerFuncs = {
    * @param {object} vm - 视图模型实例
    * @param {string} exp - 表达式，指定复制次数
    */
-  for(node, vm, exp) {
+  for(node, vm, exp, updaterFn) {
     node.__for__ = document.createComment('for');
     node.replaceWith(node.__for__);
+    updaterFn(node, vm[exp], 0);
   }
 };
 
@@ -128,9 +128,21 @@ const directiveHandlerFuncs = {
  * @param {string} exp - 表达式
  * @param {string} dir - 指令类型
  */
-const directiveHandler = (node, vm, exp, dir) => {
-  directiveHandlerFuncs[dir]?.(node, vm, exp);
+const directiveHandler = (node, vm, exp, dir, updaterFn) => {
+  directiveHandlerFuncs[dir]?.(node, vm, exp, updaterFn);
 };
+
+/**
+ * 处理节点属性的函数
+ * @param {HTMLElement} node - 要处理的 DOM 节点
+ * @param {Object} vm - 视图模型对象
+ * @param {string} exp - 表达式，用于从 vm 中获取值
+ * @param {string} dir - 指令名称
+ * @param {Function} updaterFn - 更新节点属性的函数
+ */
+function attributeHandler(node, vm, exp, dir, updaterFn) {
+  updaterFn(node, vm[exp], '', dir);
+}
 
 // 依赖收集器
 class Dep {
@@ -198,14 +210,16 @@ const updaters = {
    * @param {any} value - 新的值
    */
   // 此函数用于更新表单元素的值
-  model(node, value) {
-    // 设置表单元素的值
-    if (node.type === 'checkbox') {
-      node.checked = value.includes(node.value);
-    } else if (node.type === 'radio') {
-      node.checked = value === node.value;
-    } else {
-      node.value = value;
+  model(node, value, oldValue) {
+    if (value !== oldValue) {
+      // 设置表单元素的值
+      if (node.type === 'checkbox') {
+        node.checked = value.includes(node.value);
+      } else if (node.type === 'radio') {
+        node.checked = value === node.value;
+      } else {
+        node.value = value;
+      }
     }
   },
   // 此函数用于根据条件显示或隐藏节点
@@ -222,14 +236,15 @@ const updaters = {
   for(node, value, oldValue) {
     let last = node.__for__;
     for (let i = 0; i < oldValue; i++) {
-      last.nextElementSibling?.remove();
+      last.nextElementSibling.remove();
     }
     for (let i = 0; i < value; i++) {
       last.after(node.cloneNode(true));
+      last = last.nextElementSibling;
     }
   },
   show(node, value, oldValue) {
-    if (value !== oldValue) {
+    if (Boolean(value) === Boolean(oldValue)) {
       value ? node.style.display = '' : node.style.display = 'none';
     }
   }
@@ -251,13 +266,12 @@ function update(node, vm, exp, dir, attr) {
   const updaterFn = typeof dir === 'function' ? dir : updaters[`${dir}`];
   if (updaterFn) {
     // 调用更新函数更新节点内容
-    const watcher = new Watcher(vm, exp, (value, oldValue) => {
+    new Watcher(vm, exp, (value, oldValue) => {
       // 数据变化时调用更新函数更新节点
       updaterFn(node, value, oldValue, attr);
     });
-    watcher.update();
   }
-  // 创建一个新的观察者，当数据变化时触发回调更新节点
+  return updaterFn;
 }
 
 /**
@@ -272,16 +286,17 @@ function compileElement(node, vm, methods) {
     const exp = attr.value;
     const dir = name.substring(1);
     if (isCustomDirective(name)) {
-      directiveHandler(node, vm, exp, dir);
-      update(node, vm, exp, dir);
+      const updaterFn = update(node, vm, exp, dir);
+      directiveHandler(node, vm, exp, dir, updaterFn);
       node.removeAttribute(name);
     } else if (isAttributeDirective(name)) {
-      update(node, vm, exp, 'attribute', dir);
+      const updaterFn = update(node, vm, exp, 'attribute', dir);
+      attributeHandler(node, vm, exp, dir, updaterFn);
       node.removeAttribute(name);
     } else if (isEventDirective(name)) {
       eventHandler(node, vm, exp, dir, methods);
       node.removeAttribute(name);
-    }
+    } else ;
   });
 }
 
@@ -295,11 +310,12 @@ function compileText(node, vm) {
   const text = node.textContent;
   text.replace(reg, (match, p1) => {
     const exp = p1.trim();
-    update(node, vm, exp, () => {
+    const updaterFn = update(node, vm, exp, () => {
       node.textContent = text.replace(reg, (match, p1) => {
         return vm[p1.trim()] ?? '';
       });
     });
+    updaterFn(node, vm[exp], text);
   });
 }
 
@@ -317,7 +333,6 @@ function compilerNode(el, vm, methods, components) {
   Array.from(childNodes).forEach(node => {
     if (node.nodeType === 1) {
       if (node.tagName.includes('-')) {
-        // console.log(node.tagName)
         const comment = document.createComment('');
         node.replaceWith(comment);
         try {
