@@ -478,7 +478,7 @@ class Binding {
     // 动态导入模块
     import(url).then(module => {
       // 将样式添加到文档中
-      document.body.append(style);
+      document.head.append(style);
       // console.log(module.default); // 输出 'ES6 Module'
       // 获取模块中的数据，若不存在则使用空对象
       const data = module.default.data || {};
